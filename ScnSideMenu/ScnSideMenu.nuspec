@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ScnSideMenu.Forms</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <authors>ScienceSoft</authors>
     <owners>ScienceSoft</owners>
     <projectUrl>https://github.com/ScienceSoft-Inc/ScnSideMenu</projectUrl>
@@ -15,22 +15,27 @@
     </dependencies>
   </metadata>
   <files>
+    <!-- PCL -->
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll"     target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\ScnGesture.Plugin.dll" />
+    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll"                             target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\ScnPage.Plugin.dll" />
+    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll"                               target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\ScnSideMenu.dll" />
+
     <!--iOS-->
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll" target="lib\MonoTouch10\ScnGesture.Plugin.dll" />
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.iOS\bin\iPhone\Release\ScnGesture.Plugin.iOS.dll" target="lib\MonoTouch10\ScnGesture.Plugin.iOS.dll" />
-    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll" target="lib\MonoTouch10\ScnPage.Plugin.dll" />
-    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll" target="lib\MonoTouch10\ScnSideMenu.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll"                    target="lib\Xamarin.iOS10\ScnGesture.Plugin.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.iOS\bin\iPhone\Release\ScnGesture.Plugin.iOS.dll"     target="lib\Xamarin.iOS10\ScnGesture.Plugin.iOS.dll" />
+    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll"                                            target="lib\Xamarin.iOS10\ScnPage.Plugin.dll" />
+    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll"                                              target="lib\Xamarin.iOS10\ScnSideMenu.dll" />
 
     <!--Android-->
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll" target="lib\MonoAndroid41\ScnGesture.Plugin.dll" />
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.Droid\bin\Release\ScnGesture.Plugin.Droid.dll" target="lib\MonoAndroid41\ScnGesture.Plugin.Droid.dll" />
-    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll" target="lib\MonoAndroid41\ScnPage.Plugin.dll" />
-    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll" target="lib\MonoAndroid41\ScnSideMenu.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll"                 target="lib\MonoAndroid10\ScnGesture.Plugin.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.Droid\bin\Release\ScnGesture.Plugin.Droid.dll"     target="lib\MonoAndroid10\ScnGesture.Plugin.Droid.dll" />
+    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll"                                         target="lib\MonoAndroid10\ScnPage.Plugin.dll" />
+    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll"                                           target="lib\MonoAndroid10\ScnSideMenu.dll" />
 
     <!--WP-->
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll" target="lib\wp8\ScnGesture.Plugin.dll" />
-    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.WinPhone\bin\Release\ScnGesture.Plugin.WinPhone.dll" target="lib\wp8\ScnGesture.Plugin.WinPhone.dll" />
-    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll" target="lib\wp8\ScnPage.Plugin.dll" />
-    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll" target="lib\wp8\ScnSideMenu.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin\bin\Release\ScnGesture.Plugin.dll"                       target="lib\wp8\ScnGesture.Plugin.dll" />
+    <file src="Plugins\ScnGesture.Plugin\ScnGesture.Plugin.WinPhone\bin\Release\ScnGesture.Plugin.WinPhone.dll"     target="lib\wp8\ScnGesture.Plugin.WinPhone.dll" />
+    <file src="Plugins\ScnPage.Plugin\bin\Release\ScnPage.Plugin.dll"                                               target="lib\wp8\ScnPage.Plugin.dll" />
+    <file src="ScnSideMenu\ScnSideMenu\bin\Release\ScnSideMenu.dll"                                                 target="lib\wp8\ScnSideMenu.dll" />
   </files>
 </package>
