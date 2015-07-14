@@ -1,6 +1,6 @@
-# ScnSideMenu
-Xamarin.Forms side menu control (targeted at Android, iOS and Windows Phone)
+ScnSideMenu
 ======================
+Xamarin.Forms side menu control (targeted at Android, iOS and Windows Phone)
 
 How to use this control in Xamarin.Forms app
 ===========================================
