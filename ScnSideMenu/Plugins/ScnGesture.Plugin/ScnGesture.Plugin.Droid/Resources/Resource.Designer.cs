@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("ScnGesture.Plugin.Droid.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("ScnGesture.Plugin.Droid.Resource", IsApplication=false)]
 
 namespace ScnGesture.Plugin.Droid
 {
@@ -22,10 +22,6 @@ namespace ScnGesture.Plugin.Droid
 		static Resource()
 		{
 			global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-		}
-		
-		public static void UpdateIdValues()
-		{
 		}
 		
 		public partial class Attribute
@@ -41,18 +37,21 @@ namespace ScnGesture.Plugin.Droid
 			}
 		}
 		
-		public partial class Drawable
+		public partial class String
 		{
 			
-			// aapt resource value: 0x7f020000
-			public const int icon = 2130837504;
+			// aapt resource value: 0x7f020001
+			public static int ApplicationName = 2130837505;
 			
-			static Drawable()
+			// aapt resource value: 0x7f020000
+			public static int Hello = 2130837504;
+			
+			static String()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
 			}
 			
-			private Drawable()
+			private String()
 			{
 			}
 		}

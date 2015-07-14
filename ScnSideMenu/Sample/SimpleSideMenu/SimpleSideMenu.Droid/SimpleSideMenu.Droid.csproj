@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Plugins\ScnGesture.Plugin\ScnGesture.Plugin.Droid\ScnGesture.Plugin.Droid.csproj">
-      <Project>{3283435d-dcd3-4cb4-be07-cb2a4bfff34b}</Project>
+      <Project>{5298f345-ba30-4cf3-b890-2e0e0f2dcd03}</Project>
       <Name>ScnGesture.Plugin.Droid</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\ScnPage.Plugin\ScnPage.Plugin.csproj">
@@ -95,7 +95,7 @@
       <Name>ScnPage.Plugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ScnSideMenu\ScnSideMenu\ScnSideMenu.csproj">
-      <Project>{4a6ae328-e0d9-4d99-82c5-02c9828b7995}</Project>
+      <Project>{f6e545a3-ef5d-4207-8414-55d40bd449e2}</Project>
       <Name>ScnSideMenu</Name>
     </ProjectReference>
   </ItemGroup>

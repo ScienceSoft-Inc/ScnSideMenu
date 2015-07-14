@@ -174,7 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Plugins\ScnGesture.Plugin\ScnGesture.Plugin.WinPhone\ScnGesture.Plugin.WinPhone.csproj">
-      <Project>{6e5f6269-277c-4d53-955a-e535ac0313fb}</Project>
+      <Project>{d3fe6eae-1024-4e8f-bb1b-b5e8e1bae943}</Project>
       <Name>ScnGesture.Plugin.WinPhone</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\ScnPage.Plugin\ScnPage.Plugin.csproj">
@@ -182,7 +182,7 @@
       <Name>ScnPage.Plugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ScnSideMenu\ScnSideMenu\ScnSideMenu.csproj">
-      <Project>{4a6ae328-e0d9-4d99-82c5-02c9828b7995}</Project>
+      <Project>{f6e545a3-ef5d-4207-8414-55d40bd449e2}</Project>
       <Name>ScnSideMenu</Name>
     </ProjectReference>
   </ItemGroup>

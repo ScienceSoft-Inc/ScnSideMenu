@@ -26,6 +26,8 @@ namespace SimpleSideMenu.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::ScnGesture.Plugin.Droid.Resource.String.ApplicationName = global::SimpleSideMenu.Droid.Resource.String.ApplicationName;
+			global::ScnGesture.Plugin.Droid.Resource.String.Hello = global::SimpleSideMenu.Droid.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -53,6 +55,25 @@ namespace SimpleSideMenu.Droid
 			}
 			
 			private Drawable()
+			{
+			}
+		}
+		
+		public partial class String
+		{
+			
+			// aapt resource value: 0x7f030001
+			public const int ApplicationName = 2130903041;
+			
+			// aapt resource value: 0x7f030000
+			public const int Hello = 2130903040;
+			
+			static String()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private String()
 			{
 			}
 		}
