@@ -47,11 +47,15 @@ namespace ScnPage.Plugin.Forms
             }
         }
 
+        public BaseContentPage()
+        {
+            InitContentLayout();
+        }
+
         public BaseContentPage(Type viewModelType, Type contentUIType)
         {
             viewModel = (BaseViewModel)Activator.CreateInstance(viewModelType);
             contentUI = (BaseContentUI)Activator.CreateInstance(contentUIType);
-            //viewModel = (BaseViewModel)Activator.CreateInstance(viewModelType, this, contentUI);
 
             //Binding ContentUI with ViewModel
             viewModel.SetPage(this, contentUI);
@@ -64,26 +68,30 @@ namespace ScnPage.Plugin.Forms
 
             this.SetBinding(IsBusyProperty, "IsLoadBusy");
 
-            baseLayout = new RelativeLayout 
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand
-            };
-            Content = baseLayout;
-
             InitContentLayout();
             InitLoadingLayout();
         }
 
         private void InitContentLayout()
         {
+            baseLayout = new RelativeLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
+            Content = baseLayout;
+
             contentLayout = new StackLayout
             {
                 Padding = new Thickness(0),
                 Spacing = 0
             };
 
-            baseLayout.Children.Add(contentLayout, Constraint.Constant(0), Constraint.Constant(0), Constraint.RelativeToParent(parent => { return parent.Width; }), Constraint.RelativeToParent(parent => { return parent.Height; }));
+            baseLayout.Children.Add(contentLayout, 
+                Constraint.Constant(0), 
+                Constraint.Constant(0), 
+                Constraint.RelativeToParent(parent => { return parent.Width; }), 
+                Constraint.RelativeToParent(parent => { return parent.Height; }));
         }
         
         private void InitLoadingLayout()

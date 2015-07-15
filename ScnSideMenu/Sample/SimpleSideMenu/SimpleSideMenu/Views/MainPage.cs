@@ -3,42 +3,68 @@ using System.Collections.Generic;
 using System.Text;
 
 using ScnSideMenu.Forms;
-using SimpleSideMenu.ViewModels;
-using SimpleSideMenu.Views.ContentUI;
 using Xamarin.Forms;
 
 namespace SimpleSideMenu.Views
 {
     public class MainPage : SideBarPage
     {
-        private MainViewModel viewModel
-        {
-            get { return (MainViewModel)BindingContext; }
-        }
-
-        private MainContentUI contentUI
-        {
-            get { return (MainContentUI)ContentUI; }
-        }
-
         public MainPage()
-            : base(typeof(MainViewModel), typeof(MainContentUI))
         {
-            var btnRightMenu = new Button
+            #region right menu
+            var btnRightMenuShow = new Button
             {
-                Text = "Right menu",
+                Text = "Right menu show",
             };
-            btnRightMenu.Clicked += (s, e) => { IsShowRightPanel = !IsShowRightPanel; };
+            btnRightMenuShow.Clicked += (s, e) => { IsShowRightPanel = !IsShowRightPanel; };
+            
+            //add button to main layout on page
+            ContentLayout.Children.Add(btnRightMenuShow);
 
-            ContentLayout.Children.Add(btnRightMenu);
+            //set width for right panel
+            RightPanelWidth = 150;
 
-            var btnLeftMenu = new Button
+            //add label to main layout on right panel
+            RightPanel.AddToContext(
+                new StackLayout
+                {
+                    Padding = new Thickness(32),
+                    Children =
+                    {
+                        new Label
+                        {
+                            Text = "right menu",
+                            TextColor = Color.Red,
+                        }
+                    }
+                });
+            RightPanel.BackgroundColor = Color.Blue;
+            #endregion
+
+            #region left menu
+            var btnLeftMenuShow = new Button
             {
-                Text = "Left menu",
+                Text = "Left menu show",
             };
-            btnLeftMenu.Clicked += (s, e) => { IsShowLeftPanel = !IsShowLeftPanel; };
+            btnLeftMenuShow.Clicked += (s, e) => { IsShowLeftPanel = !IsShowLeftPanel; };
 
-            ContentLayout.Children.Add(btnLeftMenu);
+            ContentLayout.Children.Add(btnLeftMenuShow);
+
+            LeftPanel.BackgroundColor = Color.Yellow;
+            LeftPanel.AddToContext(
+                new StackLayout
+                {
+                    Padding = new Thickness(32),
+                    Children =
+                    {
+                        new Label
+                        {
+                            Text = "left menu",
+                            TextColor = Color.Green,
+                        }
+                    }
+                });
+            #endregion
         }
     }
 }

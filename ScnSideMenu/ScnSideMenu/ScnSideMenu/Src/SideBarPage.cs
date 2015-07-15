@@ -6,8 +6,18 @@ namespace ScnSideMenu.Forms
 {
     public class SideBarPage : BaseContentPage
     {
+        public SideBarPage()
+        {
+            InitPanel();
+        }
+
         public SideBarPage(Type viewModelType, Type contentUIType)
             : base(viewModelType, contentUIType)
+        {
+            InitPanel();
+        }
+
+        private void InitPanel()
         {
             LeftPanel = new SideBarPanel();
             RightPanel = new SideBarPanel();

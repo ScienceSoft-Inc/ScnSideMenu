@@ -10,8 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\ContentUI\MainContentUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\MainPage.cs" />
   </ItemGroup>
 </Project>
