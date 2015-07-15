@@ -6,11 +6,6 @@ namespace ScnPage.Plugin.Forms
 {
     public class BaseContentPage : ContentPage
     {
-        /*protected App CurrentApp
-        {
-            get { return (App)Application.Current; }
-        }*/
-
 		private BaseContentUI contentUI;
         public BaseContentUI ContentUI
         {

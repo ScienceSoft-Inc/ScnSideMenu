@@ -6,25 +6,6 @@ namespace ScnPage.Plugin.Forms
 {
     public class BaseViewModel : NotifyPropertyChanged
 	{
-        /*public BaseViewModel(BaseContentPage basePage, BaseContentUI baseContentUI)
-		{
-            ViewPage = basePage;
-            ContentUI = baseContentUI;
-
-            Title = ContentUI.Title;
-            appBarBackBtnTitle = NavigationPage.GetBackButtonTitle(ViewPage);
-
-            InitProperty();
-
-            ViewPage.Appearing += ViewPage_Appearing;
-            InitLifecycle();
-		}*/
-
-        /*protected App CurrentApp
-        {
-            get { return (App)Application.Current; }
-        }*/
-
         public BaseContentPage ViewPage
         {
             get;

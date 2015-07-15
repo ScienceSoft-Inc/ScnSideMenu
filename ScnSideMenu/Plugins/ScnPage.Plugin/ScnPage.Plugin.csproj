@@ -38,8 +38,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Src\BaseContentPage.cs" />
     <Compile Include="Src\BaseContentUI.cs" />
+    <Compile Include="Src\BaseLanguageStrings.cs" />
     <Compile Include="Src\BaseViewModel.cs" />
-    <Compile Include="Src\Helpers\LanguageHelper.cs" />
     <Compile Include="Src\Helpers\NotifyPropertyChanged.cs" />
   </ItemGroup>
   <ItemGroup>
