@@ -5,6 +5,8 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+using ScnGesture.Plugin.Forms.iOS.Renderers;
+
 namespace SimpleSideMenu.iOS
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -23,6 +25,8 @@ namespace SimpleSideMenu.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init ();
+            BoxViewGestureRenderer.Init();
+
 			LoadApplication (new SimpleSideMenu.App ());
 
 			return base.FinishedLaunching (app, options);

@@ -21,6 +21,8 @@ namespace ScnGesture.Plugin.Forms.Droid.Renderers
 {
     public class BoxViewGestureRenderer : BoxRenderer
     {
+        public static void Init() { }
+
         private readonly GestureListener _listener;
         private readonly GestureDetector _detector;
 

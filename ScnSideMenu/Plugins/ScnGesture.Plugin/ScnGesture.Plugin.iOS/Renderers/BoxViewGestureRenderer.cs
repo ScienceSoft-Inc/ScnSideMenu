@@ -16,6 +16,8 @@ namespace ScnGesture.Plugin.Forms.iOS.Renderers
 {
     public class BoxViewGestureRenderer : BoxRenderer
     {
+        public static void Init() { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<BoxView> e)
         {
             base.OnElementChanged(e);

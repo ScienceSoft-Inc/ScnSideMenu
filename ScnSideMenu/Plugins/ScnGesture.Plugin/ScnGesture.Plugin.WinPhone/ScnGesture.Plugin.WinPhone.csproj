@@ -85,6 +85,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\BoxViewGestureRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScnGesture.Plugin\ScnGesture.Plugin.csproj">
@@ -92,9 +93,7 @@
       <Name>ScnGesture.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Renderers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="README_FIRST.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />

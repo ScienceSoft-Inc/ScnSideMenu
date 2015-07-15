@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
+using ScnGesture.Plugin.Forms.Droid.Renderers;
+
 namespace SimpleSideMenu.Droid
 {
 	[Activity (Label = "SimpleSideMenu", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -17,6 +19,8 @@ namespace SimpleSideMenu.Droid
 			base.OnCreate (bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
+            BoxViewGestureRenderer.Init();
+
 			LoadApplication (new SimpleSideMenu.App ());
 		}
 	}
