@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-using ScnGesture.Plugin.Forms.iOS.Renderers;
+using ScnViewGestures.Plugin.Forms.iOS.Renderers;
 
 namespace SimpleSideMenu.iOS
 {
@@ -25,7 +25,7 @@ namespace SimpleSideMenu.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init ();
-            BoxViewGestureRenderer.Init();
+            ViewGesturesRenderer.Init();
 
 			LoadApplication (new SimpleSideMenu.App ());
 

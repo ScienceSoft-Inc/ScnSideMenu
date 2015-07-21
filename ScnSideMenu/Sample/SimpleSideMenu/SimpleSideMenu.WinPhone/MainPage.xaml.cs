@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-using ScnGesture.Plugin.Forms.WinPhone.Renderers;
+using ScnViewGestures.Plugin.Forms.WinPhone.Renderers;
 
 namespace SimpleSideMenu.WinPhone
 {
@@ -20,7 +20,7 @@ namespace SimpleSideMenu.WinPhone
 			SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
 
 			global::Xamarin.Forms.Forms.Init ();
-            BoxViewGestureRenderer.Init();
+            ViewGesturesRenderer.Init();
 
 			LoadApplication (new SimpleSideMenu.App ());
 		}

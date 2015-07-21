@@ -1,13 +1,15 @@
 ﻿using System;
 using Xamarin.Forms;
-using ScnGesture.Plugin.Forms;
+using ScnViewGestures.Plugin.Forms;
 
 namespace ScnSideMenu.Forms
 {
     public class SideBarPanel : AbsoluteLayout
     {
-        public SideBarPanel()
+        public SideBarPanel(PanelAlignEnum panelAlign)
         {
+            panelAlignEnum = panelAlign;
+
             BackgroundColor = Color.White;
             VerticalOptions = LayoutOptions.FillAndExpand;
             HorizontalOptions = LayoutOptions.EndAndExpand;
@@ -18,14 +20,9 @@ namespace ScnSideMenu.Forms
             Children.Add(panelLayout);
 
             CloseContext();
-
-            if (Device.OS == TargetPlatform.WinPhone)
-            {
-                var tapSideBar = new TapGestureRecognizer();
-                tapSideBar.Tapped += (sender, e) => { OnClick(); };
-                GestureRecognizers.Add(tapSideBar);
-            }
         }
+
+        private PanelAlignEnum panelAlignEnum;
 
         public event EventHandler Click;
         public void OnClick()
@@ -47,6 +44,32 @@ namespace ScnSideMenu.Forms
         {
             panelLayout.Children.RemoveAt(panelLayout.Children.Count - 1);
 
+            if (inputTransparent)
+            {
+                var viewGestures = new ViewGestures();
+                viewGestures.Content = view;
+                viewGestures.BackgroundColor = BackgroundColor;
+
+                viewGestures.Tap += (s, e) => { OnClick(); };
+                if (panelAlignEnum == PanelAlignEnum.paLeft)
+                    viewGestures.SwipeLeft += (s, e) => { OnClick(); };
+                else if (panelAlignEnum == PanelAlignEnum.paRight)
+                    viewGestures.SwipeRight += (s, e) => { OnClick(); };
+
+                AddView(viewGestures);
+                previousView = viewGestures;
+            }
+            else
+            {
+                AddView(view);
+                previousView = view;
+            }
+
+            CloseContext();
+        }
+
+        private void AddView(View view)
+        {
             if (previousView != null)
             {
                 panelLayout.Children.Add(view,
@@ -64,38 +87,22 @@ namespace ScnSideMenu.Forms
                     Constraint.Constant(0),
                     Constraint.RelativeToParent(parent => { return parent.Width; }));
             }
-
-            previousView = view;
-
-            if (inputTransparent)
-            {
-                var boxGesture = new BoxViewGesture(null);
-                boxGesture.Tap += (s, e) => { OnClick(); };
-                boxGesture.Swipe += (s, e) => { OnClick(); };
-                panelLayout.Children.Add(boxGesture,
-                    Constraint.Constant(0),
-                    Constraint.RelativeToView(view, (parent, sibling) =>
-                    {
-                        return sibling.Y;
-                    }),
-                    Constraint.RelativeToParent(parent => { return parent.Width; }),
-                    Constraint.RelativeToView(view, (parent, sibling) =>
-                    {
-                        return sibling.Y + sibling.Height;
-                    }));
-            }
-
-            CloseContext();
         }
 
         private void CloseContext()
         {
-            var boxGesture = new BoxViewGesture(null);
-            boxGesture.Tap += (s, e) => { OnClick(); };
-            boxGesture.Swipe += (s, e) => { OnClick(); };
+            var viewGestures = new ViewGestures();
+            viewGestures.BackgroundColor = BackgroundColor;
+
+            viewGestures.Tap += (s, e) => { OnClick(); };
+            if (panelAlignEnum == PanelAlignEnum.paLeft)
+                viewGestures.SwipeLeft += (s, e) => { OnClick(); };
+            else if (panelAlignEnum == PanelAlignEnum.paRight)
+                viewGestures.SwipeRight += (s, e) => { OnClick(); };
+
             if (previousView != null)
             {
-                panelLayout.Children.Add(boxGesture,
+                panelLayout.Children.Add(viewGestures,
                     Constraint.Constant(0),
                     Constraint.RelativeToView(previousView, (parent, sibling) =>
                     {
@@ -106,7 +113,7 @@ namespace ScnSideMenu.Forms
             }
             else
             {
-                panelLayout.Children.Add(boxGesture,
+                panelLayout.Children.Add(viewGestures,
                     Constraint.Constant(0),
                     Constraint.Constant(0),
                     Constraint.RelativeToParent(parent => { return parent.Width; }),

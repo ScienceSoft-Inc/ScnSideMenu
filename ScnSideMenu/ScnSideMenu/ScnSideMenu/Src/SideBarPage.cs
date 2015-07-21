@@ -4,6 +4,8 @@ using ScnPage.Plugin.Forms;
 
 namespace ScnSideMenu.Forms
 {
+    public enum PanelAlignEnum { paLeft, paRight }
+
     public class SideBarPage : BaseContentPage
     {
         public SideBarPage()
@@ -19,11 +21,10 @@ namespace ScnSideMenu.Forms
 
         private void InitPanel()
         {
-            LeftPanel = new SideBarPanel();
-            RightPanel = new SideBarPanel();
+            LeftPanel = new SideBarPanel(PanelAlignEnum.paLeft);
+            RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
         }
 
-        public enum PanelEnum { pLeft, pRight }
         static object locker = new object();
 
         #region Left panel
@@ -69,7 +70,7 @@ namespace ScnSideMenu.Forms
                     else
                         HideLeftPanel();
 
-                    OnPanelChanged(new SideBarEventArgs(value, PanelEnum.pLeft));
+                    OnPanelChanged(new SideBarEventArgs(value, PanelAlignEnum.paLeft));
                 }
             }
         }
@@ -125,7 +126,7 @@ namespace ScnSideMenu.Forms
                     else
                         HideRightPanel();
 
-                    OnPanelChanged(new SideBarEventArgs(value, PanelEnum.pLeft));
+                    OnPanelChanged(new SideBarEventArgs(value, PanelAlignEnum.paLeft));
                 }
             }
         }
@@ -199,9 +200,9 @@ namespace ScnSideMenu.Forms
         public class SideBarEventArgs : EventArgs
         {
             public readonly bool IsShow;
-            public readonly PanelEnum Panel;
+            public readonly PanelAlignEnum Panel;
 
-            public SideBarEventArgs(bool isShow, PanelEnum panel)
+            public SideBarEventArgs(bool isShow, PanelAlignEnum panel)
             {
                 IsShow = isShow;
                 Panel = panel;

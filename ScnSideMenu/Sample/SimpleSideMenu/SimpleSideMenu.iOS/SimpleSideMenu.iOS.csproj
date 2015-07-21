@@ -117,6 +117,14 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ScnViewGestures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ScnViewGestures.Forms.1.0.1\lib\Xamarin.iOS10\ScnViewGestures.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ScnViewGestures.iOS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ScnViewGestures.Forms.1.0.1\lib\Xamarin.iOS10\ScnViewGestures.iOS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -139,12 +147,6 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Plugins\ScnGesture.Plugin\ScnGesture.Plugin.iOS\ScnGesture.Plugin.iOS.csproj">
-      <Project>{cf22c524-96ac-4560-90f9-286bd8c204af}</Project>
-      <Name>ScnGesture.Plugin.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\ScnPage.Plugin\ScnPage.Plugin.csproj">
       <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
       <Name>ScnPage.Plugin</Name>
