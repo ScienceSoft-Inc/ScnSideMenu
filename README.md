@@ -12,9 +12,7 @@ Screenshots
 ===========================================
 All screenshots are made on Android platform, but in other platforms they looks the same.
 
-![Main](Screenshots/Droid/Screenshot_MainPage.png)
-![Main](Screenshots/Droid/Screenshot_LeftSidePanel.png)
-![Main](Screenshots/Droid/Screenshot_RightSidePanel.png)
+![Main](Screenshots/Droid/SideMenuSample.png)
 
 How to use this control in Xamarin.Forms app
 ===========================================
