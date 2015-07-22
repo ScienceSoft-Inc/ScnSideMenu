@@ -1,38 +1,51 @@
 ﻿using System;
 using Xamarin.Forms;
 using ScnPage.Plugin.Forms;
+using ScnViewGestures.Plugin.Forms;
 
 namespace ScnSideMenu.Forms
 {
+    [Flags]
+    public enum PanelSetEnum 
+    { 
+        psNone = 0,
+        psLeft = 1, 
+        psRight = 2,
+        psLeftRight = psLeft | psRight,
+    }
+
     public enum PanelAlignEnum { paLeft, paRight }
 
     public class SideBarPage : BaseContentPage
     {
-        public SideBarPage()
+        public SideBarPage(PanelSetEnum panelSet)
         {
-            InitPanel();
+            InitPanel(panelSet);
         }
 
-        public SideBarPage(Type viewModelType, Type contentUIType)
+        public SideBarPage(Type viewModelType, Type contentUIType, PanelSetEnum panelSet)
             : base(viewModelType, contentUIType)
         {
-            InitPanel();
+            InitPanel(panelSet);
         }
 
-        private void InitPanel()
+        private void InitPanel(PanelSetEnum panelSet)
         {
-            LeftPanel = new SideBarPanel(PanelAlignEnum.paLeft);
-            RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
+            if ((panelSet == PanelSetEnum.psLeft) || (panelSet == PanelSetEnum.psLeftRight))
+                LeftPanel = new SideBarPanel(PanelAlignEnum.paLeft);
+
+            if ((panelSet == PanelSetEnum.psRight) || (panelSet == PanelSetEnum.psLeftRight))
+                RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
         }
 
         static object locker = new object();
 
         #region Left panel
-        private SideBarPanel leftPanel;
+        private SideBarPanel leftPanel = null;
         public SideBarPanel LeftPanel 
         { 
             get { return leftPanel; }
-            set
+            private set
             {
                 leftPanel = value;
 
@@ -48,6 +61,43 @@ namespace ScnSideMenu.Forms
                     Constraint.Constant(0),
                     Constraint.RelativeToParent(parent => { return _leftPanelWidth; }),
                     Constraint.RelativeToParent(parent => { return parent.Height; }));
+
+                // space near border for showing panel of a finger 
+                var swipePanel = new BoxView
+                {
+                    BackgroundColor = Color.Transparent,
+                };
+
+                var viewGesture = new ViewGestures
+                {
+                    Content = swipePanel,
+                    BackgroundColor = Color.Transparent,
+                };
+
+                viewGesture.SwipeRight += (s, e) => 
+                {
+                    if (!IsShowLeftPanel)
+                        IsShowLeftPanel = true;
+                };
+
+                viewGesture.SwipeLeft += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                viewGesture.Tap += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                baseLayout.Children.Add(viewGesture,
+                    Constraint.Constant(0),
+                    Constraint.Constant(0),
+                    Constraint.Constant(15),
+                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
+                    {
+                        return sibling.Height;
+                    }));
             }
         }
 
@@ -84,11 +134,11 @@ namespace ScnSideMenu.Forms
         #endregion
 
         #region Right panel
-        private SideBarPanel rightPanel;
+        private SideBarPanel rightPanel = null;
         public SideBarPanel RightPanel 
         { 
             get { return rightPanel; }
-            set 
+            private set 
             {
                 rightPanel = value;
 
@@ -104,6 +154,47 @@ namespace ScnSideMenu.Forms
                         return _rightPanelWidth;
                     }),
                     Constraint.RelativeToParent(parent => { return parent.Height; }));
+
+                // space near border for showing panel of a finger 
+                var swipePanel = new BoxView
+                {
+                    BackgroundColor = Color.Transparent,
+                };
+
+                var viewGesture = new ViewGestures
+                {
+                    Content = swipePanel,
+                    BackgroundColor = Color.Transparent,
+                };
+
+                viewGesture.SwipeLeft += (s, e) =>
+                {
+                    if (!IsShowRightPanel)
+                        IsShowRightPanel = true;
+                };
+
+                viewGesture.SwipeRight += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                viewGesture.Tap += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                baseLayout.Children.Add(viewGesture,
+                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
+                    {
+                        return sibling.X - 15;
+                    }),
+                    Constraint.Constant(0),
+                    Constraint.Constant(15),
+                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
+                    {
+                        return sibling.Height;
+                    }));
+
             }
         }
 
@@ -163,24 +254,28 @@ namespace ScnSideMenu.Forms
         {
             IsShowRightPanel = false;
 
-            await LeftPanel.TranslateTo(_leftPanelWidth, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+            if (LeftPanel != null)
+                await LeftPanel.TranslateTo(_leftPanelWidth, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
         }
 
         async private void HideLeftPanel()
         {
-            await LeftPanel.TranslateTo(0, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+            if (LeftPanel != null)
+                await LeftPanel.TranslateTo(0, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
         }
 
         async private void ShowRightPanel()
         {
             IsShowLeftPanel = false;
 
-            await RightPanel.LayoutTo(new Rectangle((baseLayout.Width - _rightPanelWidth), RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
+            if (RightPanel != null)
+                await RightPanel.LayoutTo(new Rectangle((baseLayout.Width - _rightPanelWidth), RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
         }
 
         async private void HideRightPanel()
         {
-            await RightPanel.LayoutTo(new Rectangle(baseLayout.Width, RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
+            if (RightPanel != null)
+                await RightPanel.LayoutTo(new Rectangle(baseLayout.Width, RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
         }
         #endregion
 

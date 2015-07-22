@@ -9,7 +9,7 @@ namespace SimpleSideMenu.Views
 {
     public class MainPage : SideBarPage
     {
-        public MainPage()
+        public MainPage() : base(PanelSetEnum.psLeftRight)
         {
             #region right menu
             var btnRightMenuShow = new Button

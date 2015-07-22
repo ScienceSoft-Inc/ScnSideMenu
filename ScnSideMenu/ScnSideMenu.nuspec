@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ScnSideMenu.Forms</id>
-    <version>1.0.11</version>
+    <version>1.0.14</version>
     <authors>ScienceSoft</authors>
     <owners>ScienceSoft</owners>
     <projectUrl>https://github.com/ScienceSoft-Inc/ScnSideMenu</projectUrl>
@@ -12,7 +12,7 @@
     <tags>xamarin, windows phone, winphone, wp8, android, xamarin.forms, ios, menu side bar</tags>
     <dependencies>
       <dependency id="Xamarin.Forms" version="1.4.3.6376" />
-      <dependency id="ScnViewGestures.Forms" version="1.0.1" />
+      <dependency id="ScnViewGestures.Forms" version="1.0.2" />
     </dependencies>
   </metadata>
   <files>
