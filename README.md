@@ -8,6 +8,14 @@ Control suggests use two panel side bar on your choosing: left or right panel or
 You can call through changing property IsShowLeftPanel/IsShowRightPanel or use swipe gesture near border.
 For hiding panel use also changing property or swipe gesture on panel.
 
+Screenshots
+===========================================
+All screenshots are made on Android platform, but in other platforms they looks the same.
+
+![Main](Screenshots/Droid/Screenshot_MainPage.png)
+![Main](Screenshots/Droid/Screenshot_LeftSidePanel.png)
+![Main](Screenshots/Droid/Screenshot_RightSidePanel.png)
+
 How to use this control in Xamarin.Forms app
 ===========================================
 Look sample to know how right include control menu in your application.
