@@ -11,8 +11,12 @@ For hiding panel use also changing property or swipe gesture on panel.
 Screenshots
 ===========================================
 All screenshots are made on Android platform, but in other platforms they looks the same.
-
+Bellow is shown schematic representation without any stylizing.
 ![Main](Screenshots/Droid/SideMenuSample.png)
+
+Bellow is shown screenshots from real application.
+You can find sources of this application here: https://github.com/ScienceSoft-Inc/XamarinDiscountsApp.
+![Main](Screenshots/Droid/SideMenuRealApp.png)
 
 How to use this control in Xamarin.Forms app
 ===========================================
