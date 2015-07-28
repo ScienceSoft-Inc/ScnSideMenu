@@ -37,6 +37,15 @@ namespace ScnSideMenu.Forms
             if ((panelSet == PanelSetEnum.psRight) || (panelSet == PanelSetEnum.psLeftRight))
                 RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
         }
+        
+        //Parameter which used for calculation service spaces for gestures. 
+        //Usual sidebar menu is shown through button on app bar so leave empty space near panel.
+        private int _transparentSize = Device.OnPlatform(48, 48, 64);
+        public int TransparentSize
+        {
+            get { return _transparentSize; }
+            set { _transparentSize = value; }
+        }
 
         static object locker = new object();
 
@@ -54,7 +63,7 @@ namespace ScnSideMenu.Forms
                     Constraint.RelativeToParent(parent =>
                     {
                         if (_leftPanelWidth == 0)
-                            _leftPanelWidth = parent.Width - Device.OnPlatform(48, 48, 64);
+                            _leftPanelWidth = parent.Width - _transparentSize;
 
                         return 0 - _leftPanelWidth;
                     }),
@@ -62,7 +71,8 @@ namespace ScnSideMenu.Forms
                     Constraint.RelativeToParent(parent => { return _leftPanelWidth; }),
                     Constraint.RelativeToParent(parent => { return parent.Height; }));
 
-                // space near border for showing panel of a finger 
+                // space near border for showing panel of a finger
+                #region Swipe panel
                 var swipePanel = new BoxView
                 {
                     BackgroundColor = Color.Transparent,
@@ -92,14 +102,69 @@ namespace ScnSideMenu.Forms
 
                 baseLayout.Children.Add(viewGesture,
                     Constraint.Constant(0),
-                    Constraint.Constant(0),
-                    Constraint.Constant(15),
+                    Constraint.Constant(_transparentSize),
+                    Constraint.Constant(Device.OnPlatform(10, 10, 15)),
                     Constraint.RelativeToView(leftPanel, (parent, sibling) =>
                     {
-                        return sibling.Height;
+                        return sibling.Height - _transparentSize * 2;
                     }));
+                #endregion
+
+                // space near panel under active page
+                #region Transparent panel
+                var leftTransparentPanel = new BoxView
+                {
+                    BackgroundColor = Color.Transparent,
+                };
+
+                leftTransparentGestures = new ViewGestures
+                {
+                    IsVisible = false,
+                    Content = leftTransparentPanel,
+                    BackgroundColor = Color.Transparent,
+                };
+
+                leftTransparentGestures.SwipeRight += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                leftTransparentGestures.SwipeLeft += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                leftTransparentGestures.SwipeUp += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                leftTransparentGestures.SwipeDown += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                leftTransparentGestures.Tap += (s, e) =>
+                {
+                    IsShowLeftPanel = false;
+                };
+
+                baseLayout.Children.Add(leftTransparentGestures,
+                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
+                    {
+                        return sibling.Width;
+                    }),
+                    Constraint.Constant(_transparentSize),
+                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
+                    {
+                        return parent.Width - sibling.Width;
+                    }),
+                    Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
+                #endregion
             }
         }
+
+        private ViewGestures leftTransparentGestures;
 
         private bool _isShowLeftPanel;
         public bool IsShowLeftPanel
@@ -114,7 +179,7 @@ namespace ScnSideMenu.Forms
                 lock (locker)
                 {
                     _isShowLeftPanel = value;
-
+                    leftTransparentGestures.IsVisible = _isShowLeftPanel;
                     if (value)
                         ShowLeftPanel();
                     else
@@ -149,13 +214,14 @@ namespace ScnSideMenu.Forms
                     Constraint.RelativeToParent(parent =>
                     {
                         if (_rightPanelWidth == 0)
-                            _rightPanelWidth = parent.Width - Device.OnPlatform(48, 48, 64);
+                            _rightPanelWidth = parent.Width - _transparentSize;
 
                         return _rightPanelWidth;
                     }),
                     Constraint.RelativeToParent(parent => { return parent.Height; }));
 
                 // space near border for showing panel of a finger 
+                #region Swipe panel
                 var swipePanel = new BoxView
                 {
                     BackgroundColor = Color.Transparent,
@@ -186,17 +252,69 @@ namespace ScnSideMenu.Forms
                 baseLayout.Children.Add(viewGesture,
                     Constraint.RelativeToView(rightPanel, (parent, sibling) =>
                     {
-                        return sibling.X - 15;
+                        return sibling.X - Device.OnPlatform(10, 10, 15);
                     }),
-                    Constraint.Constant(0),
-                    Constraint.Constant(15),
+                    Constraint.Constant(_transparentSize),
+                    Constraint.Constant(Device.OnPlatform(10, 10, 15)),
                     Constraint.RelativeToView(rightPanel, (parent, sibling) =>
                     {
-                        return sibling.Height;
+                        return sibling.Height - _transparentSize * 2;
                     }));
+                #endregion
+
+                // space near panel under active page
+                #region Transparent panel
+                var rightTransparentPanel = new BoxView
+                {
+                    BackgroundColor = Color.Transparent,
+                };
+
+                rightTransparentGestures = new ViewGestures
+                {
+                    IsVisible = false,
+                    Content = rightTransparentPanel,
+                    BackgroundColor = Color.Transparent,
+                };
+
+                rightTransparentGestures.SwipeRight += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                rightTransparentGestures.SwipeLeft += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                rightTransparentGestures.SwipeUp += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                rightTransparentGestures.SwipeDown += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                rightTransparentGestures.Tap += (s, e) =>
+                {
+                    IsShowRightPanel = false;
+                };
+
+                baseLayout.Children.Add(rightTransparentGestures,
+                    Constraint.Constant(0),
+                    Constraint.Constant(_transparentSize),
+                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
+                    {
+                        return parent.Width - sibling.Width;
+                    }),
+                    Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
+                #endregion
 
             }
         }
+
+        private ViewGestures rightTransparentGestures;
 
         private bool _isShowRightPanel;
         public bool IsShowRightPanel
@@ -211,6 +329,7 @@ namespace ScnSideMenu.Forms
                 lock (locker)
                 {
                     _isShowRightPanel = value;
+                    rightTransparentGestures.IsVisible = _isShowRightPanel;
 
                     if (value)
                         ShowRightPanel();
@@ -289,7 +408,7 @@ namespace ScnSideMenu.Forms
                 IsShowRightPanel = false;
             }
 
-            return IsBackPress && base.OnBackButtonPressed();
+            return IsBackPress || base.OnBackButtonPressed();
         }
 
         public class SideBarEventArgs : EventArgs

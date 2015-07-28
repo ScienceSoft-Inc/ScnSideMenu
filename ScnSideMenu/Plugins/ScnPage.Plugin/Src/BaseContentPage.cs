@@ -142,17 +142,23 @@ namespace ScnPage.Plugin.Forms
 
         public void LoadingProcessSwitchGUI()
         {
-            NavigationPage.SetHasBackButton(this, !ViewModel.IsLoading);
+            if (viewModel != null)
+            {
+                NavigationPage.SetHasBackButton(this, !ViewModel.IsLoading);
 
-            if (ViewModel.IsLoading)
-                HideToolBar();
-            else
-                ShowToolBar();
+                if (ViewModel.IsLoading)
+                    HideToolBar();
+                else
+                    ShowToolBar();
+            }
         }
 
         protected override bool OnBackButtonPressed()
         {
-            bool IsBackPress = viewModel.IsLoading;
+            bool IsBackPress = false;
+            
+            if (viewModel != null)
+                IsBackPress = viewModel.IsLoading;
 
             return IsBackPress;
         }
