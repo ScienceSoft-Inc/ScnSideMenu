@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ScnPage.Plugin.Forms
@@ -40,6 +41,12 @@ namespace ScnPage.Plugin.Forms
                 return toolbar ??
                     (toolbar = new List<ToolbarItem>());
             }
+        }
+
+        public event EventHandler Disposing;
+        public void OnDisposing()
+        {
+            if (Disposing != null) Disposing(this, EventArgs.Empty);
         }
 
         public BaseContentPage()
@@ -161,6 +168,45 @@ namespace ScnPage.Plugin.Forms
                 IsBackPress = viewModel.IsLoading;
 
             return IsBackPress;
+        }
+
+        #region OpenningLocker
+        static object OpenningLocker = new object();
+        private bool _isOpenning = false;
+        private bool IsOpenning
+        {
+            get
+            {
+                lock (OpenningLocker)
+                    return _isOpenning;
+            }
+            set
+            {
+                lock (OpenningLocker)
+                    _isOpenning = value;
+            }
+        }
+        #endregion
+
+        public async void PushAsync(Page page, bool animated = true)
+        {
+            if (IsOpenning)
+                return;
+
+            try
+            {
+                IsOpenning = true;
+                await this.Navigation.PushAsync(page, animated);
+            }
+            finally
+            {
+                IsOpenning = false;
+            }
+        }
+
+        public async void PopAsync(bool animated = true)
+        {
+            await this.Navigation.PopAsync(animated);
         }
     }
 }

@@ -388,13 +388,13 @@ namespace ScnSideMenu.Forms
             IsShowLeftPanel = false;
 
             if (RightPanel != null)
-                await RightPanel.LayoutTo(new Rectangle((baseLayout.Width - _rightPanelWidth), RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
+                await RightPanel.TranslateTo(0 - _rightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
         }
 
         async private void HideRightPanel()
         {
             if (RightPanel != null)
-                await RightPanel.LayoutTo(new Rectangle(baseLayout.Width, RightPanel.TranslationY, RightPanel.Width, RightPanel.Height), SpeedAnimatePanel, Easing.CubicOut);
+                await RightPanel.TranslateTo( _rightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
         }
         #endregion
 
