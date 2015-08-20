@@ -173,7 +173,7 @@ namespace ScnPage.Plugin.Forms
         #region OpenningLocker
         static object OpenningLocker = new object();
         private bool _isOpenning = false;
-        private bool IsOpenning
+        public bool IsOpenning
         {
             get
             {
@@ -188,7 +188,7 @@ namespace ScnPage.Plugin.Forms
         }
         #endregion
 
-        public async void PushAsync(Page page, bool animated = true)
+        public async void OpenPage(Page page, bool animated = true)
         {
             if (IsOpenning)
                 return;
@@ -202,11 +202,6 @@ namespace ScnPage.Plugin.Forms
             {
                 IsOpenning = false;
             }
-        }
-
-        public async void PopAsync(bool animated = true)
-        {
-            await this.Navigation.PopAsync(animated);
         }
     }
 }
