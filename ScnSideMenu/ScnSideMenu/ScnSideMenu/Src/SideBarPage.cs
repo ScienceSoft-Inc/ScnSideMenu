@@ -89,11 +89,13 @@ namespace ScnSideMenu.Forms
 
                 leftSwipeGesture.Tap += (s, e) =>
                 {
-                    IsShowLeftPanel = false;
+                    IsShowRightPanel = false;
                 };
 
                 leftSwipeGesture.Drag += (s, e) =>
                 {
+                    IsShowRightPanel = false;
+
                     if (e.DistanceX > swipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smRight;
                     else if (e.DistanceX < -swipeReactionValue)
@@ -182,7 +184,8 @@ namespace ScnSideMenu.Forms
                     Constraint.Constant(_transparentSize),
                     Constraint.RelativeToView(leftPanel, (parent, sibling) =>
                     {
-                        return parent.Width - sibling.Width;
+                        var width = parent.Width - sibling.Width;
+                        return (RightPanel == null) ? width : width - _rightSwipeSize;
                     }),
                     Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
                 #endregion
@@ -262,11 +265,13 @@ namespace ScnSideMenu.Forms
 
                 rightSwipeGesture.Tap += (s, e) =>
                 {
-                    IsShowRightPanel = false;
+                    IsShowLeftPanel = false;
                 };
 
                 rightSwipeGesture.Drag += (s, e) =>
                 {
+                    IsShowLeftPanel = false;
+
                     if (e.DistanceX > swipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smRight;
                     else if (e.DistanceX < -swipeReactionValue)
@@ -351,11 +356,12 @@ namespace ScnSideMenu.Forms
                 };
 
                 baseLayout.Children.Add(rightTransparentGestures,
-                    Constraint.Constant(0),
+                    Constraint.Constant((LeftPanel == null) ? 0 : _leftSwipeSize),
                     Constraint.Constant(_transparentSize),
                     Constraint.RelativeToView(rightPanel, (parent, sibling) =>
                     {
-                        return parent.Width - sibling.Width - _rightSwipeSize;
+                        var width = parent.Width - sibling.Width- _rightSwipeSize;
+                        return (RightPanel == null) ? width : width - _leftSwipeSize;
                     }),
                     Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
                 #endregion

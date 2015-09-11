@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>ScnSideMenu.Forms</id>
-    <version>1.1.0</version>
+    <version>1.2.2</version>
     <authors>ScienceSoft</authors>
     <owners>ScienceSoft</owners>
     <projectUrl>https://github.com/ScienceSoft-Inc/ScnSideMenu</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Xamarin.Forms side menu control (targeted at Android, iOS and Windows Phone)</description>
     <copyright>ScienceSoft inc.</copyright>
-    <tags>xamarin, windows phone, winphone, wp8, android, xamarin.forms, ios, menu side bar</tags>
+    <tags>xamarin, xamarin.forms, menu sidebar, ios, android, windows phone, winphone, wp8</tags>
     <dependencies>
       <dependency id="Xamarin.Forms" version="1.4.3.6376" />
-      <dependency id="ScnViewGestures.Forms" version="1.0.2" />
+      <dependency id="ScnViewGestures.Forms" version="1.2.0" />
     </dependencies>
   </metadata>
   <files>
