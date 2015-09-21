@@ -23,7 +23,7 @@ namespace SimpleSideMenu.Views
 
             //set width for right panel
             RightPanelWidth = 150;
-
+            
             //add label to main layout on right panel
             RightPanel.AddToContext(
                 new StackLayout
@@ -39,8 +39,9 @@ namespace SimpleSideMenu.Views
                     }
                 });
             RightPanel.BackgroundColor = Color.Blue;
+            
             #endregion
-
+            
             #region left menu
             var btnLeftMenuShow = new Button
             {

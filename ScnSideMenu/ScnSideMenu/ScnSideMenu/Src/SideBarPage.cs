@@ -20,22 +20,24 @@ namespace ScnSideMenu.Forms
     {
         public SideBarPage(PanelSetEnum panelSet)
         {
-            InitPanel(panelSet);
+            Init(panelSet);
         }
 
         public SideBarPage(Type viewModelType, Type contentUIType, PanelSetEnum panelSet)
             : base(viewModelType, contentUIType)
         {
-            InitPanel(panelSet);
+            Init(panelSet);
         }
 
-        private void InitPanel(PanelSetEnum panelSet)
+        private void Init(PanelSetEnum panelSet)
         {
             if ((panelSet == PanelSetEnum.psLeft) || (panelSet == PanelSetEnum.psLeftRight))
                 LeftPanel = new SideBarPanel(PanelAlignEnum.paLeft);
 
             if ((panelSet == PanelSetEnum.psRight) || (panelSet == PanelSetEnum.psLeftRight))
                 RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
+
+            Disappearing += (s, e) => { ClosePanel(); };
         }
         
         //Parameter which used for calculation service spaces for gestures. 
@@ -208,6 +210,9 @@ namespace ScnSideMenu.Forms
             {
                 lock (locker)
                 {
+                    if (LeftPanel == null)
+                        return;
+
                     _isShowLeftPanel = value;
                     leftTransparentGestures.IsVisible = _isShowLeftPanel;
                     if (value)
@@ -384,6 +389,9 @@ namespace ScnSideMenu.Forms
             {
                 lock (locker)
                 {
+                    if (RightPanel == null)
+                        return;
+
                     _isShowRightPanel = value;
                     rightTransparentGestures.IsVisible = _isShowRightPanel;
 

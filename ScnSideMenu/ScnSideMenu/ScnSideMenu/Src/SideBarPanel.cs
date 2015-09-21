@@ -4,7 +4,7 @@ using ScnViewGestures.Plugin.Forms;
 
 namespace ScnSideMenu.Forms
 {
-    public class SideBarPanel : AbsoluteLayout
+    public class SideBarPanel : StackLayout
     {
         public SideBarPanel(PanelAlignEnum panelAlign)
         {
@@ -15,10 +15,12 @@ namespace ScnSideMenu.Forms
             HorizontalOptions = LayoutOptions.EndAndExpand;
 
             panelLayout = new RelativeLayout();
-            SetLayoutFlags(panelLayout, AbsoluteLayoutFlags.All);
-            SetLayoutBounds(panelLayout, new Rectangle(0f, 0f, 1f, 1f));
-            Children.Add(panelLayout);
-
+            var scrollPanel = new ScrollView
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Content = panelLayout,
+            };
+            Children.Add(scrollPanel);
             CloseContext();
         }
 
@@ -109,7 +111,11 @@ namespace ScnSideMenu.Forms
                         return sibling.Y + sibling.Height;
                     }),
                     Constraint.RelativeToParent(parent => { return parent.Width; }),
-                    Constraint.RelativeToParent(parent => { return parent.Height; }));
+                    Constraint.RelativeToView(previousView, (parent, sibling) =>
+                    {
+                        var h = parent.Height -(sibling.Y + sibling.Height);
+                        return (h > 0) ? h : 0;
+                    }));
             }
             else
             {
