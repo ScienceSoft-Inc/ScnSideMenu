@@ -1,6 +1,6 @@
 ScnSideMenu
 ======================
-Xamarin.Forms side menu control (targeted at Android, iOS and Windows Phone) - it lets you add sliding menus (left and right) to you application.
+Xamarin.Forms side menu control (targeted at Android and iOS, Windows Phone is temporary unavaliable) - it lets you add sliding menus (left and right) to you application.
 
 Control Structure
 ===========================================
