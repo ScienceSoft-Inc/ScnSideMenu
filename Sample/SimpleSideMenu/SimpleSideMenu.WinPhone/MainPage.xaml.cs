@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-
-using ScnViewGestures.Plugin.Forms.WinPhone.Renderers;
+﻿using ScnViewGestures.Plugin.Forms.WinRT.Renderers;
 
 namespace SimpleSideMenu.WinPhone
 {
-	public partial class MainPage : global::Xamarin.Forms.Platform.WinPhone.FormsApplicationPage
+	public sealed partial class MainPage
 	{
-		public MainPage ()
+		public MainPage()
 		{
-			InitializeComponent ();
-			SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
-
-			global::Xamarin.Forms.Forms.Init ();
-            ViewGesturesRenderer.Init();
-
-			LoadApplication (new SimpleSideMenu.App ());
+			InitializeComponent();
+			ViewGesturesRenderer.Init();
+			LoadApplication(new SimpleSideMenu.App());
 		}
+
 	}
 }
