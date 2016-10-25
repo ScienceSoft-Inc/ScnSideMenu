@@ -6,7 +6,7 @@ namespace SimpleSideMenu.UWP
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 			ViewGesturesRenderer.Init();
 			LoadApplication(new SimpleSideMenu.App());
 		}

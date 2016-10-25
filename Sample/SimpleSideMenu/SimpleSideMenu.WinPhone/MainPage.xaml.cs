@@ -10,6 +10,5 @@ namespace SimpleSideMenu.WinPhone
 			ViewGesturesRenderer.Init();
 			LoadApplication(new SimpleSideMenu.App());
 		}
-
 	}
 }
