@@ -8,7 +8,7 @@ namespace ScnSideMenu.Forms
     {
         public SideBarPanel(PanelAlignEnum panelAlign)
         {
-            panelAlignEnum = panelAlign;
+            _panelAlign = panelAlign;
 
             BackgroundColor = Color.White;
             VerticalOptions = LayoutOptions.FillAndExpand;
@@ -24,16 +24,21 @@ namespace ScnSideMenu.Forms
             CloseContext();
         }
 
-        private PanelAlignEnum panelAlignEnum;
+        private PanelAlignEnum _panelAlign;
+        public PanelAlignEnum PanelAlign
+        {
+            get { return _panelAlign; }
+        }
 
         public event EventHandler Click;
         public void OnClick()
         {
-            if (Click != null) Click(this, EventArgs.Empty);
+            if (Click != null)
+                Click(this, EventArgs.Empty);
         }
 
         private RelativeLayout panelLayout;
-        private View previousView = null;
+        private View previousView;
 
         public void ClearContext()
         {
@@ -52,11 +57,11 @@ namespace ScnSideMenu.Forms
                 viewGestures.Content = view;
                 viewGestures.BackgroundColor = BackgroundColor;
 
-                viewGestures.Tap += (s, e) => { OnClick(); };
-                if (panelAlignEnum == PanelAlignEnum.paLeft)
-                    viewGestures.SwipeLeft += (s, e) => { OnClick(); };
-                else if (panelAlignEnum == PanelAlignEnum.paRight)
-                    viewGestures.SwipeRight += (s, e) => { OnClick(); };
+                viewGestures.Tap += (s, e) => OnClick();
+                if (PanelAlign == PanelAlignEnum.paLeft)
+                    viewGestures.SwipeLeft += (s, e) => OnClick();
+                else if (PanelAlign == PanelAlignEnum.paRight)
+                    viewGestures.SwipeRight += (s, e) => OnClick();
 
                 AddView(viewGestures);
                 previousView = viewGestures;
@@ -76,18 +81,15 @@ namespace ScnSideMenu.Forms
             {
                 panelLayout.Children.Add(view,
                     Constraint.Constant(0),
-                    Constraint.RelativeToView(previousView, (parent, sibling) =>
-                    {
-                        return sibling.Y + sibling.Height;
-                    }),
-                    Constraint.RelativeToParent(parent => { return parent.Width; }));
+                    Constraint.RelativeToView(previousView, (parent, sibling) => sibling.Y + sibling.Height),
+                    Constraint.RelativeToParent(parent => parent.Width));
             }
             else
             {
                 panelLayout.Children.Add(view,
                     Constraint.Constant(0),
                     Constraint.Constant(0),
-                    Constraint.RelativeToParent(parent => { return parent.Width; }));
+                    Constraint.RelativeToParent(parent => parent.Width));
             }
         }
 
@@ -96,25 +98,22 @@ namespace ScnSideMenu.Forms
             var viewGestures = new ViewGestures();
             viewGestures.BackgroundColor = BackgroundColor;
 
-            viewGestures.Tap += (s, e) => { OnClick(); };
-            if (panelAlignEnum == PanelAlignEnum.paLeft)
-                viewGestures.SwipeLeft += (s, e) => { OnClick(); };
-            else if (panelAlignEnum == PanelAlignEnum.paRight)
-                viewGestures.SwipeRight += (s, e) => { OnClick(); };
+            viewGestures.Tap += (s, e) => OnClick();
+            if (PanelAlign == PanelAlignEnum.paLeft)
+                viewGestures.SwipeLeft += (s, e) => OnClick();
+            else if (PanelAlign == PanelAlignEnum.paRight)
+                viewGestures.SwipeRight += (s, e) => OnClick();
 
             if (previousView != null)
             {
                 panelLayout.Children.Add(viewGestures,
                     Constraint.Constant(0),
-                    Constraint.RelativeToView(previousView, (parent, sibling) =>
-                    {
-                        return sibling.Y + sibling.Height;
-                    }),
-                    Constraint.RelativeToParent(parent => { return parent.Width; }),
+                    Constraint.RelativeToView(previousView, (parent, sibling) => sibling.Y + sibling.Height),
+                    Constraint.RelativeToParent(parent => parent.Width),
                     Constraint.RelativeToView(previousView, (parent, sibling) =>
                     {
                         var h = parent.Height -(sibling.Y + sibling.Height);
-                        return (h > 0) ? h : 0;
+                        return h > 0 ? h : 0;
                     }));
             }
             else
@@ -122,8 +121,8 @@ namespace ScnSideMenu.Forms
                 panelLayout.Children.Add(viewGestures,
                     Constraint.Constant(0),
                     Constraint.Constant(0),
-                    Constraint.RelativeToParent(parent => { return parent.Width; }),
-                    Constraint.RelativeToParent(parent => { return parent.Height; }));
+                    Constraint.RelativeToParent(parent => parent.Width),
+                    Constraint.RelativeToParent(parent => parent.Height));
             }
         }
     }

@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSideMenu.iOS", "Sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSideMenu.Droid", "Sample\SimpleSideMenu\SimpleSideMenu.Droid\SimpleSideMenu.Droid.csproj", "{D9E8714E-0562-479B-ACAA-75155E032EC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScnSideMenu", "ScnSideMenu\ScnSideMenu\ScnSideMenu.csproj", "{F6E545A3-EF5D-4207-8414-55D40BD449E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScnSideMenu", "ScnSideMenu\ScnSideMenu.csproj", "{F6E545A3-EF5D-4207-8414-55D40BD449E2}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
