@@ -1,6 +1,6 @@
 ScnSideMenu
 ======================
-Xamarin.Forms side menu control (targeted at Android, iOS, Windows Phone RT and UWP) - it lets you add sliding menus (left and right) to you application.
+Xamarin.Forms side menu control (targeted at Android & iOS) - it lets you add sliding menus (left and right) to you application.
 
 Control Structure
 ===========================================
@@ -24,17 +24,6 @@ ViewGesturesRenderer.Init();
 Android:
 ```cs
 Xamarin.Forms.Forms.Init(this, bundle);
-ViewGesturesRenderer.Init();
-```
-WinPhoneRT:
-```cs
-Xamarin.Forms.Forms.Init();
-ViewGesturesRenderer.Init();
-```
-
-UWP:
-```cs
-Xamarin.Forms.Forms.Init();
 ViewGesturesRenderer.Init();
 ```
 
