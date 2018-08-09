@@ -1,7 +1,7 @@
-﻿using System;
-using Xamarin.Forms;
-using ScnPage.Plugin.Forms;
+﻿using ScnPage.Plugin.Forms;
 using ScnViewGestures.Plugin.Forms;
+using System;
+using Xamarin.Forms;
 
 namespace ScnSideMenu.Forms
 {
@@ -11,7 +11,7 @@ namespace ScnSideMenu.Forms
         psNone = 0,
         psLeft = 1, 
         psRight = 2,
-        psLeftRight = psLeft | psRight,
+        psLeftRight = psLeft | psRight
     }
 
     public enum PanelAlignEnum { paLeft, paRight }
@@ -23,58 +23,56 @@ namespace ScnSideMenu.Forms
             Init(panelSet);
         }
 
-        public SideBarPage(Type viewModelType, Type contentUIType, PanelSetEnum panelSet)
-            : base(viewModelType, contentUIType)
+        public SideBarPage(Type viewModelType, Type contentUiType, PanelSetEnum panelSet)
+            : base(viewModelType, contentUiType)
         {
             Init(panelSet);
         }
 
         private void Init(PanelSetEnum panelSet)
         {
-            if ((panelSet == PanelSetEnum.psLeft) || (panelSet == PanelSetEnum.psLeftRight))
+            if (panelSet == PanelSetEnum.psLeft || panelSet == PanelSetEnum.psLeftRight)
                 LeftPanel = new SideBarPanel(PanelAlignEnum.paLeft);
 
-            if ((panelSet == PanelSetEnum.psRight) || (panelSet == PanelSetEnum.psLeftRight))
+            if (panelSet == PanelSetEnum.psRight || panelSet == PanelSetEnum.psLeftRight)
                 RightPanel = new SideBarPanel(PanelAlignEnum.paRight);
 
-            Disappearing += (s, e) => { ClosePanel(); };
-        }
-        
-        //Parameter which used for calculation service spaces for gestures. 
-        //Usual sidebar menu is shown through button on app bar so leave empty space near panel.
-        private int _transparentSize = Device.OnPlatform(48, 48, 64);
-        public int TransparentSize
-        {
-            get { return _transparentSize; }
-            set { _transparentSize = value; }
+            Disappearing += (s, e) => ClosePanel();
         }
 
-        static object locker = new object();
+        public int TransparentSize { get; set; } = 48;
+
+        private static readonly object Locker = new object();
+
         public enum SwipeMotionEnum { smNone, smLeft, smRight }
-        private SwipeMotionEnum SwipeGestureCatch = SwipeMotionEnum.smNone;
-        private int swipeReactionValue = Device.OnPlatform(40, 40, 50);
+
+        protected SwipeMotionEnum SwipeGestureCatch = SwipeMotionEnum.smNone;
+
+        public int SwipeReactionValue { get; set; } = 40;
 
         #region Left panel
-        private SideBarPanel leftPanel = null;
+        private SideBarPanel _leftPanel;
         public SideBarPanel LeftPanel 
         { 
-            get { return leftPanel; }
+            get { return _leftPanel; }
             private set
             {
-                leftPanel = value;
+                _leftPanel = value;
 
-                leftPanel.Click += (s, e) => { ClosePanel(); };
-                baseLayout.Children.Add(leftPanel,
+                _leftPanel.Tap += (sender, args) => IsShowLeftPanel = false;
+                _leftPanel.Swipe += (sender, args) => IsShowLeftPanel = false;
+
+                baseLayout.Children.Add(_leftPanel,
                     Constraint.RelativeToParent(parent =>
                     {
                         if (_leftPanelWidth == 0)
-                            _leftPanelWidth = parent.Width - _transparentSize;
+                            _leftPanelWidth = parent.Width - TransparentSize;
 
-                        return 0 - _leftPanelWidth;
+                        return -_leftPanelWidth;
                     }),
                     Constraint.Constant(0),
-                    Constraint.RelativeToParent(parent => { return _leftPanelWidth; }),
-                    Constraint.RelativeToParent(parent => { return parent.Height; }));
+                    Constraint.RelativeToParent(parent => _leftPanelWidth),
+                    Constraint.RelativeToParent(parent => parent.Height));
 
                 // space near border for showing panel of a finger
                 #region Swipe panel
@@ -84,60 +82,49 @@ namespace ScnSideMenu.Forms
 					InputTransparent = true
 				};
 
-                leftSwipeGesture = new ViewGestures
+                _leftSwipeGesture = new ViewGestures
                 {
                     Content = swipePanel,
-                    BackgroundColor = Color.Transparent,
+                    BackgroundColor = Color.Transparent
                 };
 
-                leftSwipeGesture.Tap += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
+                _leftSwipeGesture.Tap += (s, e) => IsShowRightPanel = false;
 
-                leftSwipeGesture.Drag += (s, e) =>
+                _leftSwipeGesture.Drag += (s, e) =>
                 {
                     IsShowRightPanel = false;
 
-                    if (e.DistanceX > swipeReactionValue)
+                    if (e.DistanceX > SwipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smRight;
-                    else if (e.DistanceX < -swipeReactionValue)
+                    else if (e.DistanceX < -SwipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smLeft;
                     else
                         MoveLeftPanel(e.DistanceX);
                 };
 
-                leftSwipeGesture.TouchEnded += (s, e) =>
+                _leftSwipeGesture.TouchEnded += (s, e) =>
                 {
                     switch (SwipeGestureCatch)
                     {
                         case SwipeMotionEnum.smLeft:
                             IsShowLeftPanel = false;
                             break;
-
                         case SwipeMotionEnum.smRight:
                             IsShowLeftPanel = true;
                             break;
-
                         default:
-                            if (LeftPanel.TranslationX >= _leftPanelWidth / 2)
-                                IsShowLeftPanel = true;
-                            else
-                                IsShowLeftPanel = false;
+                            IsShowLeftPanel = LeftPanel.TranslationX >= _leftPanelWidth / 2;
                             break;
                     }
 
                     SwipeGestureCatch = SwipeMotionEnum.smNone;
                 };
 
-                baseLayout.Children.Add(leftSwipeGesture,
+                baseLayout.Children.Add(_leftSwipeGesture,
                     Constraint.Constant(0),
-                    Constraint.Constant(_transparentSize),
-                    Constraint.Constant(_leftSwipeSize),
-                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
-                    {
-                        return sibling.Height - _transparentSize * 2;
-                    }));
+                    Constraint.Constant(TransparentSize),
+                    Constraint.Constant(LeftSwipeSize),
+                    Constraint.RelativeToView(_leftPanel, (parent, sibling) => sibling.Height - TransparentSize * 2));
                 #endregion
 
                 // space near panel under active page
@@ -148,75 +135,54 @@ namespace ScnSideMenu.Forms
 					InputTransparent = true
 				};
 
-                leftTransparentGestures = new ViewGestures
+                _leftTransparentGestures = new ViewGestures
                 {
                     IsVisible = false,
                     Content = leftTransparentPanel,
-                    BackgroundColor = Color.Transparent,
+                    BackgroundColor = Color.Transparent
                 };
 
-                leftTransparentGestures.SwipeRight += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
+                _leftTransparentGestures.SwipeRight += (s, e) => IsShowLeftPanel = false;
+                _leftTransparentGestures.SwipeLeft += (s, e) => IsShowLeftPanel = false;
+                _leftTransparentGestures.SwipeUp += (s, e) => IsShowLeftPanel = false;
+                _leftTransparentGestures.SwipeDown += (s, e) => IsShowLeftPanel = false;
+                _leftTransparentGestures.Tap += (s, e) => IsShowLeftPanel = false;
 
-                leftTransparentGestures.SwipeLeft += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
-
-                leftTransparentGestures.SwipeUp += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
-
-                leftTransparentGestures.SwipeDown += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
-
-                leftTransparentGestures.Tap += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
-
-                baseLayout.Children.Add(leftTransparentGestures,
-                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
-                    {
-                        return sibling.Width + _leftSwipeSize;
-                    }),
-                    Constraint.Constant(_transparentSize),
-                    Constraint.RelativeToView(leftPanel, (parent, sibling) =>
+                baseLayout.Children.Add(_leftTransparentGestures,
+                    Constraint.RelativeToView(_leftPanel, (parent, sibling) => sibling.Width + LeftSwipeSize),
+                    Constraint.Constant(TransparentSize),
+                    Constraint.RelativeToView(_leftPanel, (parent, sibling) =>
                     {
                         var width = parent.Width - sibling.Width;
-                        return (RightPanel == null) ? width : width - _rightSwipeSize;
+                        return RightPanel == null ? width : width - RightSwipeSize;
                     }),
-                    Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
+                    Constraint.RelativeToParent(parent => parent.Height - TransparentSize * 2));
                 #endregion
             }
         }
 
-        private ViewGestures leftSwipeGesture;
-        private int _leftSwipeSize = Device.OnPlatform(10, 10, 15);
-        private ViewGestures leftTransparentGestures;
+        public int LeftSwipeSize { get; set; } = 10;
+
+        private ViewGestures _leftSwipeGesture;
+        private ViewGestures _leftTransparentGestures;
 
         private bool _isShowLeftPanel;
         public bool IsShowLeftPanel
         {
             get
             {
-                lock (locker)
+                lock (Locker)
                     return _isShowLeftPanel;
             }
             set
             {
-                lock (locker)
+                lock (Locker)
                 {
                     if (LeftPanel == null)
                         return;
 
                     _isShowLeftPanel = value;
-                    leftTransparentGestures.IsVisible = _isShowLeftPanel;
+                    _leftTransparentGestures.IsVisible = _isShowLeftPanel;
                     if (value)
                         ShowLeftPanel();
                     else
@@ -230,32 +196,34 @@ namespace ScnSideMenu.Forms
         private double _leftPanelWidth;
         public double LeftPanelWidth
         {
-            get { return _leftPanelWidth; }
-            set { _leftPanelWidth = (value > 0) ? value : 0; }
+            get => _leftPanelWidth;
+            set => _leftPanelWidth = value > 0 ? value : 0;
         }
         #endregion
 
         #region Right panel
-        private SideBarPanel rightPanel = null;
+        private SideBarPanel _rightPanel;
         public SideBarPanel RightPanel 
         { 
-            get { return rightPanel; }
+            get { return _rightPanel; }
             private set 
             {
-                rightPanel = value;
+                _rightPanel = value;
 
-                rightPanel.Click += (s, e) => { ClosePanel(); };
-                baseLayout.Children.Add(rightPanel,
-                    Constraint.RelativeToParent(parent => { return parent.Width; }),
+                _rightPanel.Tap += (sender, args) => IsShowRightPanel = false;
+                _rightPanel.Swipe += (sender, args) => IsShowRightPanel = false;
+
+                baseLayout.Children.Add(_rightPanel,
+                    Constraint.RelativeToParent(parent => parent.Width),
                     Constraint.Constant(0),
                     Constraint.RelativeToParent(parent =>
                     {
                         if (_rightPanelWidth == 0)
-                            _rightPanelWidth = parent.Width - _transparentSize;
+                            _rightPanelWidth = parent.Width - TransparentSize;
 
                         return _rightPanelWidth;
                     }),
-                    Constraint.RelativeToParent(parent => { return parent.Height; }));
+                    Constraint.RelativeToParent(parent => parent.Height));
 
                 // space near border for showing panel of a finger 
                 #region Swipe panel
@@ -265,63 +233,49 @@ namespace ScnSideMenu.Forms
 					InputTransparent = true
 				};
 
-                rightSwipeGesture = new ViewGestures
+                _rightSwipeGesture = new ViewGestures
                 {
                     Content = swipePanel,
-                    BackgroundColor = Color.Transparent,
+                    BackgroundColor = Color.Transparent
                 };
 
-                rightSwipeGesture.Tap += (s, e) =>
-                {
-                    IsShowLeftPanel = false;
-                };
+                _rightSwipeGesture.Tap += (s, e) => IsShowLeftPanel = false;
 
-                rightSwipeGesture.Drag += (s, e) =>
+                _rightSwipeGesture.Drag += (s, e) =>
                 {
                     IsShowLeftPanel = false;
 
-                    if (e.DistanceX > swipeReactionValue)
+                    if (e.DistanceX > SwipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smRight;
-                    else if (e.DistanceX < -swipeReactionValue)
+                    else if (e.DistanceX < -SwipeReactionValue)
                         SwipeGestureCatch = SwipeMotionEnum.smLeft;
                     else
                         MoveRightPanel(e.DistanceX);
                 };
 
-                rightSwipeGesture.TouchEnded += (s, e) =>
+                _rightSwipeGesture.TouchEnded += (s, e) =>
                 {
                     switch (SwipeGestureCatch)
                     {
                         case SwipeMotionEnum.smLeft:
                             IsShowRightPanel = true;
                             break;
-
                         case SwipeMotionEnum.smRight:
                             IsShowRightPanel = false;
                             break;
-
                         default:
-                            if (RightPanel.TranslationX <= -_rightPanelWidth / 2)
-                                IsShowRightPanel = true;
-                            else
-                                IsShowRightPanel = false;
+                            IsShowRightPanel = RightPanel.TranslationX <= -_rightPanelWidth / 2;
                             break;
                     }
 
                     SwipeGestureCatch = SwipeMotionEnum.smNone;
                 };
 
-                baseLayout.Children.Add(rightSwipeGesture,
-                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
-                    {
-                        return sibling.X - _rightSwipeSize;
-                    }),
-                    Constraint.Constant(_transparentSize),
-                    Constraint.Constant(_rightSwipeSize),
-                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
-                    {
-                        return sibling.Height - _transparentSize * 2;
-                    }));
+                baseLayout.Children.Add(_rightSwipeGesture,
+                    Constraint.RelativeToView(_rightPanel, (parent, sibling) => sibling.X - RightSwipeSize),
+                    Constraint.Constant(TransparentSize),
+                    Constraint.Constant(RightSwipeSize),
+                    Constraint.RelativeToView(_rightPanel, (parent, sibling) => sibling.Height - TransparentSize * 2));
                 #endregion
 
                 // space near panel under active page
@@ -332,72 +286,54 @@ namespace ScnSideMenu.Forms
 					InputTransparent = true
 				};
 
-                rightTransparentGestures = new ViewGestures
+                _rightTransparentGestures = new ViewGestures
                 {
                     IsVisible = false,
                     Content = rightTransparentPanel,
-                    BackgroundColor = Color.Transparent,
+                    BackgroundColor = Color.Transparent
                 };
 
-                rightTransparentGestures.SwipeRight += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
+                _rightTransparentGestures.SwipeRight += (s, e) => IsShowRightPanel = false;
+                _rightTransparentGestures.SwipeLeft += (s, e) => IsShowRightPanel = false;
+                _rightTransparentGestures.SwipeUp += (s, e) => IsShowRightPanel = false;
+                _rightTransparentGestures.SwipeDown += (s, e) => IsShowRightPanel = false;
+                _rightTransparentGestures.Tap += (s, e) => IsShowRightPanel = false;
 
-                rightTransparentGestures.SwipeLeft += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
-
-                rightTransparentGestures.SwipeUp += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
-
-                rightTransparentGestures.SwipeDown += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
-
-                rightTransparentGestures.Tap += (s, e) =>
-                {
-                    IsShowRightPanel = false;
-                };
-
-                baseLayout.Children.Add(rightTransparentGestures,
-                    Constraint.Constant((LeftPanel == null) ? 0 : _leftSwipeSize),
-                    Constraint.Constant(_transparentSize),
-                    Constraint.RelativeToView(rightPanel, (parent, sibling) =>
+                baseLayout.Children.Add(_rightTransparentGestures,
+                    Constraint.Constant(LeftPanel == null ? 0 : LeftSwipeSize),
+                    Constraint.Constant(TransparentSize),
+                    Constraint.RelativeToView(_rightPanel, (parent, sibling) =>
                     {
-                        var width = parent.Width - sibling.Width- _rightSwipeSize;
-                        return (RightPanel == null) ? width : width - _leftSwipeSize;
+                        var width = parent.Width - sibling.Width- RightSwipeSize;
+                        return RightPanel == null ? width : width - LeftSwipeSize;
                     }),
-                    Constraint.RelativeToParent(parent => { return parent.Height - _transparentSize * 2; }));
+                    Constraint.RelativeToParent(parent => parent.Height - TransparentSize * 2));
                 #endregion
             }
         }
 
-        private ViewGestures rightSwipeGesture;
-        private int _rightSwipeSize = Device.OnPlatform(10, 10, 15);
-        private ViewGestures rightTransparentGestures;
+        public int RightSwipeSize { get; set; } = 10;
+
+        private ViewGestures _rightSwipeGesture;
+        private ViewGestures _rightTransparentGestures;
 
         private bool _isShowRightPanel;
         public bool IsShowRightPanel
         {
             get
             {
-                lock (locker)
+                lock (Locker)
                     return _isShowRightPanel;
             }
             set
             {
-                lock (locker)
+                lock (Locker)
                 {
                     if (RightPanel == null)
                         return;
 
                     _isShowRightPanel = value;
-                    rightTransparentGestures.IsVisible = _isShowRightPanel;
+                    _rightTransparentGestures.IsVisible = _isShowRightPanel;
 
                     if (value)
                         ShowRightPanel();
@@ -412,22 +348,22 @@ namespace ScnSideMenu.Forms
         private double _rightPanelWidth;
         public double RightPanelWidth
         {
-            get { return _rightPanelWidth; }
-            set { _rightPanelWidth = (value > 0) ? value : 0; }
+            get => _rightPanelWidth;
+            set => _rightPanelWidth = value > 0 ? value : 0;
         }
         #endregion
 
         public event EventHandler<SideBarEventArgs> PanelChanged;
         public void OnPanelChanged(SideBarEventArgs e)
         {
-            if (PanelChanged != null) PanelChanged(this, e);
+            PanelChanged?.Invoke(this, e);
         }
 
         private uint _speedAnimatePanel = 300;
         public uint SpeedAnimatePanel
         {
-            get { return _speedAnimatePanel; }
-            set { _speedAnimatePanel = (value > 0) ? value : 0; }
+            get => _speedAnimatePanel;
+            set => _speedAnimatePanel = value > 0 ? value : 0;
         }
 
         public void ClosePanel()
@@ -437,44 +373,42 @@ namespace ScnSideMenu.Forms
         }
 
         #region Panel animation
-        async private void ShowLeftPanel()
+        private async void ShowLeftPanel()
         {
             IsShowRightPanel = false;
 
             if (LeftPanel != null)
             {
-                leftSwipeGesture.TranslateTo(_leftPanelWidth, leftSwipeGesture.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+                _leftSwipeGesture.TranslationX = _leftPanelWidth;
                 await LeftPanel.TranslateTo(_leftPanelWidth, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
 
-        async private void HideLeftPanel()
+        private async void HideLeftPanel()
         {
             if (LeftPanel != null)
             {
-                leftSwipeGesture.TranslateTo(0, leftSwipeGesture.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+                _leftSwipeGesture.TranslationX = 0;
                 await LeftPanel.TranslateTo(0, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
 
-        async private void ShowRightPanel()
+        private async void ShowRightPanel()
         {
             IsShowLeftPanel = false;
 
             if (RightPanel != null)
             {
-                rightSwipeGesture.TranslateTo(0 - _rightPanelWidth, rightSwipeGesture.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
-                //ContentLayout.FadeTo(0.5, SpeedAnimatePanel, Easing.CubicOut);
-                await RightPanel.TranslateTo(0 - _rightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+                _rightSwipeGesture.TranslationX = -_rightPanelWidth;
+                await RightPanel.TranslateTo(-_rightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
 
-        async private void HideRightPanel()
+        private async void HideRightPanel()
         {
             if (RightPanel != null)
             {
-                rightSwipeGesture.TranslateTo(0, rightSwipeGesture.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
-                //ContentLayout.FadeTo(1, SpeedAnimatePanel, Easing.CubicOut);
+                _rightSwipeGesture.TranslationX = 0;
                 await RightPanel.TranslateTo(0, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
@@ -483,40 +417,37 @@ namespace ScnSideMenu.Forms
         #region Panel move
         private void MoveLeftPanel(double deltaTranslate)
         {
-            if ((LeftPanel.TranslationX + deltaTranslate) <= 0)
+            if (LeftPanel.TranslationX + deltaTranslate <= 0)
                 LeftPanel.TranslationX = 0;
-            else if ((LeftPanel.TranslationX + deltaTranslate) >= _leftPanelWidth)
+            else if (LeftPanel.TranslationX + deltaTranslate >= _leftPanelWidth)
                 LeftPanel.TranslationX = _leftPanelWidth;
             else
                 LeftPanel.TranslationX += deltaTranslate;
 
-            leftSwipeGesture.TranslationX = LeftPanel.TranslationX;
+            _leftSwipeGesture.TranslationX = LeftPanel.TranslationX;
         }
 
         private void MoveRightPanel(double deltaTranslate)
         {
-            if ((RightPanel.TranslationX + deltaTranslate) >= 0)
+            if (RightPanel.TranslationX + deltaTranslate >= 0)
                 RightPanel.TranslationX = 0;
-            else if ((RightPanel.TranslationX + deltaTranslate) <= (0 - _rightPanelWidth))
-                RightPanel.TranslationX = 0 - _rightPanelWidth;
+            else if (RightPanel.TranslationX + deltaTranslate <= -_rightPanelWidth)
+                RightPanel.TranslationX = -_rightPanelWidth;
             else
                 RightPanel.TranslationX += deltaTranslate;
 
-            rightSwipeGesture.TranslationX = RightPanel.TranslationX;
+            _rightSwipeGesture.TranslationX = RightPanel.TranslationX;
         }
         #endregion
 
         protected override bool OnBackButtonPressed()
         {
-            bool IsBackPress = IsShowLeftPanel || IsShowRightPanel;
+            var isBackPress = IsShowLeftPanel || IsShowRightPanel;
 
-            if (IsBackPress)
-            {
-                IsShowLeftPanel = false;
-                IsShowRightPanel = false;
-            }
+            if (isBackPress)
+                ClosePanel();
 
-            return IsBackPress || base.OnBackButtonPressed();
+            return isBackPress || base.OnBackButtonPressed();
         }
 
         public class SideBarEventArgs : EventArgs
