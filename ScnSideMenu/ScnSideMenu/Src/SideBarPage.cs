@@ -338,7 +338,7 @@ namespace ScnSideMenu.Forms
                     else
                         HideRightPanel();
 
-                    OnPanelChanged(new SideBarEventArgs(value, PanelAlignEnum.paLeft));
+                    OnPanelChanged(new SideBarEventArgs(value, PanelAlignEnum.paRight));
                 }
             }
         }
