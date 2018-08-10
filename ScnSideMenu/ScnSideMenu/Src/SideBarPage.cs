@@ -59,7 +59,6 @@ namespace ScnSideMenu.Forms
             {
                 _leftPanel = value;
 
-                _leftPanel.Tap += (sender, args) => IsShowLeftPanel = false;
                 _leftPanel.Swipe += (sender, args) => IsShowLeftPanel = false;
 
                 baseLayout.Children.Add(_leftPanel,
@@ -210,7 +209,6 @@ namespace ScnSideMenu.Forms
             {
                 _rightPanel = value;
 
-                _rightPanel.Tap += (sender, args) => IsShowRightPanel = false;
                 _rightPanel.Swipe += (sender, args) => IsShowRightPanel = false;
 
                 baseLayout.Children.Add(_rightPanel,
