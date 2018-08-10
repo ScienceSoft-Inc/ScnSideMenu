@@ -20,255 +20,20 @@ namespace SimpleSideMenu.Views
 
             //set width for right panel
             RightPanelWidth = 250;
-            
-            RightPanel.BackgroundColor = Color.Blue;
-            RightPanel.Content = new StackLayout
+
+            var rightPanelContent = new StackLayout
             {
-                Padding = 32,
-                Children =
-                {
-                    new Label
-                    {
-                        Text = "right menu 1",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 2",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 3",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 4",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 5",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 6",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 7",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 8",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 1",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 2",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 3",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 4",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 5",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 6",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 7",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 8",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 1",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 2",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 3",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 4",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 5",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 6",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 7",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 8",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 1",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 2",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 3",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 4",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 5",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 6",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 7",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 8",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 1",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 2",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 3",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 4",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 5",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 6",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 7",
-                        TextColor = Color.Red
-                    },
-                    new Switch(),
-                    new Label
-                    {
-                        Text = "right menu 8",
-                        TextColor = Color.Red
-                    },
-                    new Switch()
-                }
+                Padding = 32
             };
+
+            for (var i = 0; i < 100; i++)
+            {
+                var view = CreateComplexView($"right menu {i}");
+                rightPanelContent.Children.Add(view);
+            }
+
+            RightPanel.BackgroundColor = Color.Blue;
+            RightPanel.Content = rightPanelContent;
 
             #endregion
 
@@ -295,6 +60,27 @@ namespace SimpleSideMenu.Views
                 }
             };
             #endregion
+        }
+
+        private static View CreateComplexView(string text)
+        {
+            return new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Children =
+                {
+                    new Label
+                    {
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        Text = text
+                    },
+                    new Switch
+                    {
+                        HorizontalOptions = LayoutOptions.End
+                    }
+                }
+            };
         }
     }
 }
