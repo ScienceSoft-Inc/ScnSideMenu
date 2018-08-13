@@ -8,35 +8,6 @@ namespace SimpleSideMenu.Views
         public MainPage()
             : base(PanelSetEnum.psLeftRight)
         {
-            #region right menu
-            var btnRightMenuShow = new Button
-            {
-                Text = "Right menu show"
-            };
-            btnRightMenuShow.Clicked += (s, e) => IsShowRightPanel = !IsShowRightPanel;
-            
-            //add button to main layout on page
-            ContentLayout.Children.Add(btnRightMenuShow);
-
-            //set width for right panel
-            RightPanelWidth = 250;
-
-            var rightPanelContent = new StackLayout
-            {
-                Padding = 32
-            };
-
-            for (var i = 0; i < 100; i++)
-            {
-                var view = CreateComplexView($"right menu {i}");
-                rightPanelContent.Children.Add(view);
-            }
-
-            RightPanel.BackgroundColor = Color.Blue;
-            RightPanel.Content = rightPanelContent;
-
-            #endregion
-
             #region left menu
             var btnLeftMenuShow = new Button
             {
@@ -59,6 +30,33 @@ namespace SimpleSideMenu.Views
                     }
                 }
             };
+            #endregion
+
+            #region right menu
+
+            RightPanelWidthRequest = 250;
+
+            var btnRightMenuShow = new Button
+            {
+                Text = "Right menu show"
+            };
+            btnRightMenuShow.Clicked += (s, e) => IsShowRightPanel = !IsShowRightPanel;
+
+            ContentLayout.Children.Add(btnRightMenuShow);
+
+            var rightPanelContent = new StackLayout
+            {
+                Padding = 32
+            };
+
+            for (var i = 0; i < 100; i++)
+            {
+                var view = CreateComplexView($"right menu {i}");
+                rightPanelContent.Children.Add(view);
+            }
+
+            RightPanel.BackgroundColor = Color.Blue;
+            RightPanel.Content = rightPanelContent;
             #endregion
         }
 

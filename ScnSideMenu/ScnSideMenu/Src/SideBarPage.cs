@@ -61,16 +61,21 @@ namespace ScnSideMenu.Forms
 
                 _leftPanel.Swipe += (sender, args) => IsShowLeftPanel = false;
 
-                baseLayout.Children.Add(_leftPanel,
+                LayoutChanged += (sender, args) => IsShowLeftPanel = false;
+
+                BaseLayout.Children.Add(_leftPanel,
                     Constraint.RelativeToParent(parent =>
                     {
-                        if (_leftPanelWidth == 0)
-                            _leftPanelWidth = parent.Width - TransparentSize;
+                        LeftPanelWidth = LeftPanelWidthRequest > 0
+                            ? (LeftPanelWidthRequest > parent.Width - TransparentSize
+                                ? parent.Width - TransparentSize
+                                : LeftPanelWidthRequest)
+                            : parent.Width - TransparentSize;
 
-                        return -_leftPanelWidth;
+                        return -LeftPanelWidth;
                     }),
                     Constraint.Constant(0),
-                    Constraint.RelativeToParent(parent => _leftPanelWidth),
+                    Constraint.RelativeToParent(parent => LeftPanelWidth),
                     Constraint.RelativeToParent(parent => parent.Height));
 
                 // space near border for showing panel of a finger
@@ -112,14 +117,14 @@ namespace ScnSideMenu.Forms
                             IsShowLeftPanel = true;
                             break;
                         default:
-                            IsShowLeftPanel = LeftPanel.TranslationX >= _leftPanelWidth / 2;
+                            IsShowLeftPanel = LeftPanel.TranslationX >= LeftPanelWidth / 2;
                             break;
                     }
 
                     SwipeGestureCatch = SwipeMotionEnum.smNone;
                 };
 
-                baseLayout.Children.Add(_leftSwipeGesture,
+                BaseLayout.Children.Add(_leftSwipeGesture,
                     Constraint.Constant(0),
                     Constraint.Constant(TransparentSize),
                     Constraint.Constant(LeftSwipeSize),
@@ -147,7 +152,7 @@ namespace ScnSideMenu.Forms
                 _leftTransparentGestures.SwipeDown += (s, e) => IsShowLeftPanel = false;
                 _leftTransparentGestures.Tap += (s, e) => IsShowLeftPanel = false;
 
-                baseLayout.Children.Add(_leftTransparentGestures,
+                BaseLayout.Children.Add(_leftTransparentGestures,
                     Constraint.RelativeToView(_leftPanel, (parent, sibling) => sibling.Width + LeftSwipeSize),
                     Constraint.Constant(TransparentSize),
                     Constraint.RelativeToView(_leftPanel, (parent, sibling) =>
@@ -192,12 +197,9 @@ namespace ScnSideMenu.Forms
             }
         }
 
-        private double _leftPanelWidth;
-        public double LeftPanelWidth
-        {
-            get => _leftPanelWidth;
-            set => _leftPanelWidth = value > 0 ? value : 0;
-        }
+        public double LeftPanelWidth { get; protected set; }
+
+        public double LeftPanelWidthRequest { get; set; }
         #endregion
 
         #region Right panel
@@ -211,15 +213,20 @@ namespace ScnSideMenu.Forms
 
                 _rightPanel.Swipe += (sender, args) => IsShowRightPanel = false;
 
-                baseLayout.Children.Add(_rightPanel,
+                LayoutChanged += (sender, args) => IsShowRightPanel = false;
+
+                BaseLayout.Children.Add(_rightPanel,
                     Constraint.RelativeToParent(parent => parent.Width),
                     Constraint.Constant(0),
                     Constraint.RelativeToParent(parent =>
                     {
-                        if (_rightPanelWidth == 0)
-                            _rightPanelWidth = parent.Width - TransparentSize;
+                        RightPanelWidth = RightPanelWidthRequest > 0
+                            ? (RightPanelWidthRequest > parent.Width - TransparentSize
+                                ? parent.Width - TransparentSize
+                                : RightPanelWidthRequest)
+                            : parent.Width - TransparentSize;
 
-                        return _rightPanelWidth;
+                        return RightPanelWidth;
                     }),
                     Constraint.RelativeToParent(parent => parent.Height));
 
@@ -262,14 +269,14 @@ namespace ScnSideMenu.Forms
                             IsShowRightPanel = false;
                             break;
                         default:
-                            IsShowRightPanel = RightPanel.TranslationX <= -_rightPanelWidth / 2;
+                            IsShowRightPanel = RightPanel.TranslationX <= -RightPanelWidth / 2;
                             break;
                     }
 
                     SwipeGestureCatch = SwipeMotionEnum.smNone;
                 };
 
-                baseLayout.Children.Add(_rightSwipeGesture,
+                BaseLayout.Children.Add(_rightSwipeGesture,
                     Constraint.RelativeToView(_rightPanel, (parent, sibling) => sibling.X - RightSwipeSize),
                     Constraint.Constant(TransparentSize),
                     Constraint.Constant(RightSwipeSize),
@@ -297,7 +304,7 @@ namespace ScnSideMenu.Forms
                 _rightTransparentGestures.SwipeDown += (s, e) => IsShowRightPanel = false;
                 _rightTransparentGestures.Tap += (s, e) => IsShowRightPanel = false;
 
-                baseLayout.Children.Add(_rightTransparentGestures,
+                BaseLayout.Children.Add(_rightTransparentGestures,
                     Constraint.Constant(LeftPanel == null ? 0 : LeftSwipeSize),
                     Constraint.Constant(TransparentSize),
                     Constraint.RelativeToView(_rightPanel, (parent, sibling) =>
@@ -342,13 +349,10 @@ namespace ScnSideMenu.Forms
                 }
             }
         }
-        
-        private double _rightPanelWidth;
-        public double RightPanelWidth
-        {
-            get => _rightPanelWidth;
-            set => _rightPanelWidth = value > 0 ? value : 0;
-        }
+
+        public double RightPanelWidth { get; protected set; }
+
+        public double RightPanelWidthRequest { get; set; }
         #endregion
 
         public event EventHandler<SideBarEventArgs> PanelChanged;
@@ -377,8 +381,8 @@ namespace ScnSideMenu.Forms
 
             if (LeftPanel != null)
             {
-                _leftSwipeGesture.TranslationX = _leftPanelWidth;
-                await LeftPanel.TranslateTo(_leftPanelWidth, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+                _leftSwipeGesture.TranslationX = LeftPanelWidth;
+                await LeftPanel.TranslateTo(LeftPanelWidth, LeftPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
 
@@ -397,8 +401,8 @@ namespace ScnSideMenu.Forms
 
             if (RightPanel != null)
             {
-                _rightSwipeGesture.TranslationX = -_rightPanelWidth;
-                await RightPanel.TranslateTo(-_rightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
+                _rightSwipeGesture.TranslationX = -RightPanelWidth;
+                await RightPanel.TranslateTo(-RightPanelWidth, RightPanel.TranslationY, SpeedAnimatePanel, Easing.CubicOut);
             }
         }
 
@@ -417,8 +421,8 @@ namespace ScnSideMenu.Forms
         {
             if (LeftPanel.TranslationX + deltaTranslate <= 0)
                 LeftPanel.TranslationX = 0;
-            else if (LeftPanel.TranslationX + deltaTranslate >= _leftPanelWidth)
-                LeftPanel.TranslationX = _leftPanelWidth;
+            else if (LeftPanel.TranslationX + deltaTranslate >= LeftPanelWidth)
+                LeftPanel.TranslationX = LeftPanelWidth;
             else
                 LeftPanel.TranslationX += deltaTranslate;
 
@@ -429,8 +433,8 @@ namespace ScnSideMenu.Forms
         {
             if (RightPanel.TranslationX + deltaTranslate >= 0)
                 RightPanel.TranslationX = 0;
-            else if (RightPanel.TranslationX + deltaTranslate <= -_rightPanelWidth)
-                RightPanel.TranslationX = -_rightPanelWidth;
+            else if (RightPanel.TranslationX + deltaTranslate <= -RightPanelWidth)
+                RightPanel.TranslationX = -RightPanelWidth;
             else
                 RightPanel.TranslationX += deltaTranslate;
 

@@ -1,34 +1,26 @@
-﻿using System;
+﻿using ScnPage.Plugin.Forms.Helpers;
+using System;
 using Xamarin.Forms;
-using ScnPage.Plugin.Forms.Helpers;
 
 namespace ScnPage.Plugin.Forms
 {
     public class BaseViewModel : NotifyPropertyChanged
 	{
-        public BaseContentPage ViewPage
-        {
-            get;
-            private set;
-        }
+        public BaseContentPage ViewPage { get; private set; }
 
-        public BaseContentUI ContentUI
-        {
-            get;
-            private set;
-        }
+	    public BaseContentUI ContentUI { get; private set; }
 
-        //Caption back button in application bar
-        private string appBarBackBtnTitle;
+	    //Caption back button in application bar
+        private string _appBarBackBtnTitle;
 
         #region IsLoading - property
-		private bool isLoading;
+		private bool _isLoading;
         public bool IsLoading
         {
-            get { return isLoading; }
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 IsNotLoading = !value;
 
                 OnPropertyChanged();
@@ -37,25 +29,24 @@ namespace ScnPage.Plugin.Forms
         #endregion
 
         #region IsNotLoading - property
-		private bool isNotLoading = true;
+		private bool _isNotLoading = true;
         public bool IsNotLoading
         {
-            get { return isNotLoading; }
+            get => _isNotLoading;
             set
             {
-                isNotLoading = value;
+                _isNotLoading = value;
                 OnPropertyChanged();
             }
         }
-
         #endregion
 
         //Show loading layout and ban custom layout
         #region IsLoadActivity - property
-		private bool isLoadActivity;
+		private bool _isLoadActivity;
         public bool IsLoadActivity
         {
-            get { return isLoadActivity; }
+            get => _isLoadActivity;
             set
             {
                 IsLoading = value;
@@ -63,7 +54,7 @@ namespace ScnPage.Plugin.Forms
                 NavigationPage.SetHasNavigationBar(ViewPage, !IsLoading);
                 ViewPage.LoadingProcessSwitchGUI();
 
-                isLoadActivity = value;
+                _isLoadActivity = value;
                 OnPropertyChanged();
             }
         }
@@ -71,32 +62,32 @@ namespace ScnPage.Plugin.Forms
 
         //Show loading bar in action bar
         #region IsLoadBusy - property
-		private bool isLoadBusy;
+		private bool _isLoadBusy;
         public bool IsLoadBusy
         {
-            get { return isLoadBusy; }
+            get => _isLoadBusy;
             set
             {
                 IsLoading = value;
 
-                var btnTitle = IsLoading ? ContentUI.TxtAwait : appBarBackBtnTitle;
+                var btnTitle = IsLoading ? ContentUI.TxtAwait : _appBarBackBtnTitle;
                 NavigationPage.SetBackButtonTitle(ViewPage, btnTitle);
                 ViewPage.LoadingProcessSwitchGUI();
 
-                isLoadBusy = value;
+                _isLoadBusy = value;
                 OnPropertyChanged();
             }
         }
         #endregion
 
         #region Title - property
-		private string title = string.Empty;
+		private string _title;
         public string Title
         {
-            get { return title; }
+            get => _title;
             set
             {
-                title = value.ToUpper();
+                _title = value?.ToUpper();
                 OnPropertyChanged();
             }
         }
@@ -108,18 +99,19 @@ namespace ScnPage.Plugin.Forms
             ContentUI = baseContentUI;
 
             Title = ContentUI.Title;
-            appBarBackBtnTitle = NavigationPage.GetBackButtonTitle(ViewPage);
+            _appBarBackBtnTitle = NavigationPage.GetBackButtonTitle(ViewPage);
 
             InitProperty();
 
             ViewPage.Appearing += ViewPage_Appearing;
             InitLifecycle();
         }
-  
-        protected virtual void InitProperty()
-        {}
 
-        void ViewPage_Appearing(object sender, EventArgs e)
+	    protected virtual void InitProperty()
+	    {
+	    }
+
+	    private void ViewPage_Appearing(object sender, EventArgs e)
         {
             ViewPage.LoadingProcessSwitchGUI();
             OnResuming(this, EventArgs.Empty);
@@ -128,24 +120,18 @@ namespace ScnPage.Plugin.Forms
         #region Lifecycle
         protected void InitLifecycle()
         {
-            //CurrentApp.Resuming += OnResuming;
-            //CurrentApp.Suspending += OnSuspending;
         }
 
         protected void ClearLifecycle()
         {
-            //CurrentApp.Resuming -= OnResuming;
-            //CurrentApp.Suspending -= OnSuspending;
         }
 
         protected virtual void OnResuming(object sender, EventArgs e)
         {
-            //Implement in ViewModel
         }
 
         protected virtual void OnSuspending(object sender, EventArgs e)
         {
-            //Implement in ViewModel
         }
         #endregion
 	}

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScnPage.Plugin.Forms
+﻿namespace ScnPage.Plugin.Forms
 {
     public class BaseLanguageStrings
     {
@@ -15,10 +9,7 @@ namespace ScnPage.Plugin.Forms
         
         public string EnUsValue { get; set; }
 
-        public string Current
-        {
-            get { return GetCurrentLangString(); }
-        }
+        public string Current => GetCurrentLangString();
 
         public virtual string GetCurrentLangString()
         {

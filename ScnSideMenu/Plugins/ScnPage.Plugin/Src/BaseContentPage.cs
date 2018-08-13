@@ -1,52 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ScnPage.Plugin.Forms
 {
     public class BaseContentPage : ContentPage
     {
-		private BaseContentUI contentUI;
-        public BaseContentUI ContentUI
-        {
-            get { return contentUI; }
-        }
+        public BaseContentUI ContentUI { get; }
 
-		private BaseViewModel viewModel;
-        public BaseViewModel ViewModel
-        {
-            get { return viewModel; }
-        }
+        public BaseViewModel ViewModel { get; }
 
         //base layout
-        protected RelativeLayout baseLayout;
+        protected RelativeLayout BaseLayout { get; private set; }
 
         //layout with loading progressbar
-		private StackLayout loadingLayout;
+        protected StackLayout LoadingLayout { get; private set; }
 
         //layout for custom content
-		private StackLayout contentLayout;
-        public StackLayout ContentLayout
-        {
-            get { return contentLayout; } 
-        }
+        public StackLayout ContentLayout { get; private set; }
 
         //toolbar
-		private IList<ToolbarItem> toolbar;
-        public IList<ToolbarItem> Toolbar
-        {
-            get
-            {
-                return toolbar ??
-                    (toolbar = new List<ToolbarItem>());
-            }
-        }
+		private IList<ToolbarItem> _toolbar;
+        public IList<ToolbarItem> Toolbar => _toolbar ??
+                                             (_toolbar = new List<ToolbarItem>());
 
         public event EventHandler Disposing;
         public void OnDisposing()
         {
-            if (Disposing != null) Disposing(this, EventArgs.Empty);
+            Disposing?.Invoke(this, EventArgs.Empty);
         }
 
         public BaseContentPage()
@@ -56,14 +37,14 @@ namespace ScnPage.Plugin.Forms
 
         public BaseContentPage(Type viewModelType, Type contentUIType)
         {
-            viewModel = (BaseViewModel)Activator.CreateInstance(viewModelType);
-            contentUI = (BaseContentUI)Activator.CreateInstance(contentUIType);
+            ViewModel = (BaseViewModel)Activator.CreateInstance(viewModelType);
+            ContentUI = (BaseContentUI)Activator.CreateInstance(contentUIType);
 
             //Binding ContentUI with ViewModel
-            viewModel.SetPage(this, contentUI);
+            ViewModel.SetPage(this, ContentUI);
 
             //Set binding model.
-            BindingContext = viewModel;
+            BindingContext = ViewModel;
 
             //Binding property for screen title 
             this.SetBinding(TitleProperty, "Title");
@@ -76,33 +57,33 @@ namespace ScnPage.Plugin.Forms
 
         private void InitContentLayout()
         {
-            baseLayout = new RelativeLayout
+            BaseLayout = new RelativeLayout
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
-            Content = baseLayout;
+            Content = BaseLayout;
 
-            contentLayout = new StackLayout
+            ContentLayout = new StackLayout
             {
                 Padding = new Thickness(0),
                 Spacing = 0
             };
 
-            baseLayout.Children.Add(contentLayout, 
+            BaseLayout.Children.Add(ContentLayout, 
                 Constraint.Constant(0), 
                 Constraint.Constant(0), 
-                Constraint.RelativeToParent(parent => { return parent.Width; }), 
-                Constraint.RelativeToParent(parent => { return parent.Height; }));
+                Constraint.RelativeToParent(parent => parent.Width), 
+                Constraint.RelativeToParent(parent => parent.Height));
         }
         
         private void InitLoadingLayout()
         {
-            loadingLayout = new StackLayout
+            LoadingLayout = new StackLayout
             {
                 BackgroundColor = new Color(0, 0, 0, 0.8)
             };
-            loadingLayout.SetBinding(IsVisibleProperty, "IsLoadActivity");
+            LoadingLayout.SetBinding(IsVisibleProperty, "IsLoadActivity");
 
             var activityIndicator = new ActivityIndicator
             {
@@ -110,21 +91,25 @@ namespace ScnPage.Plugin.Forms
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
             activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoadActivity");
-            if (Device.OS == TargetPlatform.Android)
+            if (Device.RuntimePlatform == Device.Android)
                 activityIndicator.HorizontalOptions = LayoutOptions.CenterAndExpand;
 
             var activityText = new Label
             {
                 TextColor = Device.OnPlatform(Color.White, Color.Default, Color.Default),
-                Text = contentUI.TxtLoading,
+                Text = ContentUI.TxtLoading,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.CenterAndExpand
             };
 
-            loadingLayout.Children.Add(activityIndicator);
-            loadingLayout.Children.Add(activityText);
+            LoadingLayout.Children.Add(activityIndicator);
+            LoadingLayout.Children.Add(activityText);
 
-            baseLayout.Children.Add(loadingLayout, Constraint.Constant(0), Constraint.Constant(0), Constraint.RelativeToParent(parent => { return parent.Width; }), Constraint.RelativeToParent(parent => { return parent.Height; }));        
+            BaseLayout.Children.Add(LoadingLayout, 
+                Constraint.Constant(0), 
+                Constraint.Constant(0), 
+                Constraint.RelativeToParent(parent => parent.Width), 
+                Constraint.RelativeToParent(parent => parent.Height));        
         }
 
         public void ReloadContentLayout()
@@ -149,7 +134,7 @@ namespace ScnPage.Plugin.Forms
 
         public void LoadingProcessSwitchGUI()
         {
-            if (viewModel != null)
+            if (ViewModel != null)
             {
                 NavigationPage.SetHasBackButton(this, !ViewModel.IsLoading);
 
@@ -162,17 +147,19 @@ namespace ScnPage.Plugin.Forms
 
         protected override bool OnBackButtonPressed()
         {
-            bool IsBackPress = false;
+            var isBackPress = false;
             
-            if (viewModel != null)
-                IsBackPress = viewModel.IsLoading;
+            if (ViewModel != null)
+                isBackPress = ViewModel.IsLoading;
 
-            return IsBackPress;
+            return isBackPress;
         }
 
         #region OpenningLocker
-        static object OpenningLocker = new object();
-        private bool _isOpenning = false;
+
+        private static readonly object OpenningLocker = new object();
+
+        private bool _isOpenning;
         public bool IsOpenning
         {
             get
@@ -186,6 +173,7 @@ namespace ScnPage.Plugin.Forms
                     _isOpenning = value;
             }
         }
+
         #endregion
 
         public async void OpenPage(Page page, bool animated = true)
@@ -196,7 +184,7 @@ namespace ScnPage.Plugin.Forms
             try
             {
                 IsOpenning = true;
-                await this.Navigation.PushAsync(page, animated);
+                await Navigation.PushAsync(page, animated);
             }
             finally
             {

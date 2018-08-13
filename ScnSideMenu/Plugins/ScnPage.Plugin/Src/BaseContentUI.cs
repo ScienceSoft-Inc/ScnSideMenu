@@ -1,33 +1,21 @@
-﻿using Xamarin.Forms;
-using ScnPage.Plugin.Forms.Helpers;
-
-namespace ScnPage.Plugin.Forms
+﻿namespace ScnPage.Plugin.Forms
 {
     public class BaseContentUI
     {
         public BaseContentUI()
         {
-            title = new BaseLanguageStrings("");
+            title = new BaseLanguageStrings();
             txtLoading = new BaseLanguageStrings("loading...");
             txtAwait = new BaseLanguageStrings("wait...");
         }
 
         public BaseLanguageStrings title;
-        public string Title
-        {
-            get { return title.Current; }
-        }
+        public string Title => title.Current;
 
         public BaseLanguageStrings txtLoading;
-        public string TxtLoading
-        {
-            get { return txtLoading.Current; }
-        }
+        public string TxtLoading => txtLoading.Current;
 
         public BaseLanguageStrings txtAwait;
-        public string TxtAwait
-        {
-            get { return txtAwait.Current; }
-        }
+        public string TxtAwait => txtAwait.Current;
     }
 }
