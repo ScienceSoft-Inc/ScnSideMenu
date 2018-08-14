@@ -17,7 +17,7 @@ namespace SimpleSideMenu.Views
 
             ContentLayout.Children.Add(btnLeftMenuShow);
 
-            LeftPanel.BackgroundColor = Color.Yellow;
+            LeftPanel.BackgroundColor = Color.LawnGreen;
             LeftPanel.Content = new StackLayout
             {
                 Padding = 32,
@@ -26,14 +26,13 @@ namespace SimpleSideMenu.Views
                     new Label
                     {
                         Text = "left menu",
-                        TextColor = Color.Green
+                        TextColor = Color.Black
                     }
                 }
             };
             #endregion
 
             #region right menu
-
             RightPanelWidthRequest = 250;
 
             var btnRightMenuShow = new Button
@@ -58,6 +57,12 @@ namespace SimpleSideMenu.Views
             RightPanel.BackgroundColor = Color.Blue;
             RightPanel.Content = rightPanelContent;
             #endregion
+
+            //set right swipe reaction panel to be wider
+            RightSwipeSize = 20;
+
+            //set transparent spaces (to skip nav bar, or bottom bar) when panel is swiped
+            TransparentSize = new Thickness(50, 0, 50, 20);
         }
 
         private static View CreateComplexView(string text)
