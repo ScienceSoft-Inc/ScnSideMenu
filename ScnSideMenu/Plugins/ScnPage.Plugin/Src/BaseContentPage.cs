@@ -87,7 +87,7 @@ namespace ScnPage.Plugin.Forms
 
             var activityIndicator = new ActivityIndicator
             {
-                Color = Device.OnPlatform(Color.White, Color.Default, Color.Default),
+                Color = Device.RuntimePlatform == Device.iOS ? Color.White : Color.Default,
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
             activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoadActivity");
@@ -96,7 +96,7 @@ namespace ScnPage.Plugin.Forms
 
             var activityText = new Label
             {
-                TextColor = Device.OnPlatform(Color.White, Color.Default, Color.Default),
+                TextColor = Device.RuntimePlatform == Device.iOS ? Color.White : Color.Default,
                 Text = ContentUI.TxtLoading,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.CenterAndExpand
