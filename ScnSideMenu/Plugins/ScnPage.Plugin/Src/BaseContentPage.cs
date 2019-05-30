@@ -13,7 +13,11 @@ namespace ScnPage.Plugin.Forms
         protected RelativeLayout BaseLayout { get; private set; }
 
         //layout with loading progressbar
-        protected StackLayout LoadingLayout { get; private set; }
+        public StackLayout LoadingLayout { get; private set; }
+
+        public Label LoadingActivityText { get; private set; }
+
+        public ActivityIndicator LoadingActivityIndicator { get; private set; }
 
         //layout for custom content
         public StackLayout ContentLayout { get; private set; }
@@ -79,25 +83,22 @@ namespace ScnPage.Plugin.Forms
             };
             LoadingLayout.SetBinding(IsVisibleProperty, "IsLoadActivity");
 
-            var activityIndicator = new ActivityIndicator
+            LoadingActivityIndicator = new ActivityIndicator
             {
-                Color = Device.RuntimePlatform == Device.iOS ? Color.White : Color.Default,
+                HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
-            activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoadActivity");
-            if (Device.RuntimePlatform == Device.Android)
-                activityIndicator.HorizontalOptions = LayoutOptions.CenterAndExpand;
+            LoadingActivityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoadActivity");
 
-            var activityText = new Label
+            LoadingActivityText = new Label
             {
-                TextColor = Device.RuntimePlatform == Device.iOS ? Color.White : Color.Default,
                 Text = ContentUI.TxtLoading,
-                VerticalOptions = LayoutOptions.StartAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.StartAndExpand
             };
 
-            LoadingLayout.Children.Add(activityIndicator);
-            LoadingLayout.Children.Add(activityText);
+            LoadingLayout.Children.Add(LoadingActivityIndicator);
+            LoadingLayout.Children.Add(LoadingActivityText);
 
             BaseLayout.Children.Add(LoadingLayout, 
                 Constraint.Constant(0), 
