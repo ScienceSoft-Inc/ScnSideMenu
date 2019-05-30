@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace ScnPage.Plugin.Forms
@@ -18,11 +17,6 @@ namespace ScnPage.Plugin.Forms
 
         //layout for custom content
         public StackLayout ContentLayout { get; private set; }
-
-        //toolbar
-		private IList<ToolbarItem> _toolbar;
-        public IList<ToolbarItem> Toolbar => _toolbar ??
-                                             (_toolbar = new List<ToolbarItem>());
 
         public event EventHandler Disposing;
         public void OnDisposing()
@@ -117,32 +111,6 @@ namespace ScnPage.Plugin.Forms
             var tmpLayout = Content;
             Content = null;
             Content = tmpLayout;
-        }
-
-        public void ShowToolBar()
-        {
-            ToolbarItems.Clear();
-
-            foreach (var item in Toolbar)
-                ToolbarItems.Add(item);
-        }
-
-        public void HideToolBar()
-        {
-            ToolbarItems.Clear();
-        }
-
-        public void LoadingProcessSwitchGUI()
-        {
-            if (ViewModel != null)
-            {
-                NavigationPage.SetHasBackButton(this, !ViewModel.IsLoading);
-
-                if (ViewModel.IsLoading)
-                    HideToolBar();
-                else
-                    ShowToolBar();
-            }
         }
 
         protected override bool OnBackButtonPressed()

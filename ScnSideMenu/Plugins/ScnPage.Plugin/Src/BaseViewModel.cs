@@ -1,6 +1,5 @@
 ﻿using ScnPage.Plugin.Forms.Helpers;
 using System;
-using Xamarin.Forms;
 
 namespace ScnPage.Plugin.Forms
 {
@@ -9,9 +8,6 @@ namespace ScnPage.Plugin.Forms
         public BaseContentPage ViewPage { get; private set; }
 
 	    public BaseContentUI ContentUI { get; private set; }
-
-	    //Caption back button in application bar
-        private string _appBarBackBtnTitle;
 
         #region IsLoading - property
 		private bool _isLoading;
@@ -51,9 +47,6 @@ namespace ScnPage.Plugin.Forms
             {
                 IsLoading = value;
 
-                NavigationPage.SetHasNavigationBar(ViewPage, !IsLoading);
-                ViewPage.LoadingProcessSwitchGUI();
-
                 _isLoadActivity = value;
                 OnPropertyChanged();
             }
@@ -69,10 +62,6 @@ namespace ScnPage.Plugin.Forms
             set
             {
                 IsLoading = value;
-
-                var btnTitle = IsLoading ? ContentUI.TxtAwait : _appBarBackBtnTitle;
-                NavigationPage.SetBackButtonTitle(ViewPage, btnTitle);
-                ViewPage.LoadingProcessSwitchGUI();
 
                 _isLoadBusy = value;
                 OnPropertyChanged();
@@ -99,11 +88,9 @@ namespace ScnPage.Plugin.Forms
             ContentUI = baseContentUI;
 
             Title = ContentUI.Title;
-            _appBarBackBtnTitle = NavigationPage.GetBackButtonTitle(ViewPage);
 
             InitProperty();
 
-            ViewPage.Appearing += ViewPage_Appearing;
             InitLifecycle();
         }
 
@@ -111,18 +98,7 @@ namespace ScnPage.Plugin.Forms
 	    {
 	    }
 
-	    private void ViewPage_Appearing(object sender, EventArgs e)
-        {
-            ViewPage.LoadingProcessSwitchGUI();
-            OnResuming(this, EventArgs.Empty);
-        }
-
-        #region Lifecycle
         protected void InitLifecycle()
-        {
-        }
-
-        protected void ClearLifecycle()
         {
         }
 
@@ -133,7 +109,6 @@ namespace ScnPage.Plugin.Forms
         protected virtual void OnSuspending(object sender, EventArgs e)
         {
         }
-        #endregion
 	}
 }
 
